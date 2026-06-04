@@ -1,0 +1,1101 @@
+@extends('layouts.app')
+
+@section('title', 'Reset Password')
+@section('body-class', 'auth-body')
+
+@section('extra-css')
+<style>
+:root {
+    --black: #000;
+    --white: #fffdf7;
+    --yellow: #ffd83d;
+    --blue: #28bff3;
+    --green: #8be8b0;
+    --red: #ff6868;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    background: var(--white);
+    color: var(--black);
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.reset-page {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--white);
+    border: 4px solid var(--black);
+    position: relative;
+    overflow: hidden;
+    padding: 44px 70px;
+    display: grid;
+    grid-template-columns: 520px 540px;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;
+}
+
+.corner-left {
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    width: 105px;
+    z-index: 1;
+}
+
+.corner-left span {
+    display: block;
+    background: var(--blue);
+    border-right: 4px solid var(--black);
+    border-bottom: 4px solid var(--black);
+    height: 45px;
+}
+
+.corner-left span:nth-child(1) {
+    width: 105px;
+}
+
+.corner-left span:nth-child(2) {
+    width: 70px;
+}
+
+.corner-left span:nth-child(3) {
+    width: 38px;
+}
+
+.corner-yellow {
+    position: absolute;
+    left: -4px;
+    bottom: -4px;
+    width: 205px;
+    z-index: 1;
+}
+
+.corner-yellow span {
+    display: block;
+    background: var(--yellow);
+    border-top: 4px solid var(--black);
+    border-right: 4px solid var(--black);
+    height: 58px;
+}
+
+.corner-yellow span:nth-child(1) {
+    width: 38px;
+}
+
+.corner-yellow span:nth-child(2) {
+    width: 86px;
+}
+
+.corner-yellow span:nth-child(3) {
+    width: 160px;
+}
+
+.corner-blue {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    width: 145px;
+    z-index: 1;
+}
+
+.corner-blue span {
+    display: block;
+    margin-left: auto;
+    background: var(--blue);
+    border-top: 4px solid var(--black);
+    border-left: 4px solid var(--black);
+    height: 67px;
+}
+
+.corner-blue span:nth-child(1) {
+    width: 48px;
+}
+
+.corner-blue span:nth-child(2) {
+    width: 92px;
+}
+
+.corner-blue span:nth-child(3) {
+    width: 145px;
+}
+
+.red-box {
+    position: absolute;
+    width: 66px;
+    height: 66px;
+    background: var(--red);
+    border: 4px solid var(--black);
+    box-shadow: 8px 8px 0 var(--black);
+    right: 76px;
+    top: 92px;
+    z-index: 1;
+}
+
+.small-green {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: var(--green);
+    border: 4px solid var(--black);
+    box-shadow: 5px 5px 0 var(--black);
+    left: 42%;
+    top: 33%;
+    z-index: 1;
+}
+
+.dots-left {
+    position: absolute;
+    left: 9%;
+    top: 34%;
+    display: grid;
+    grid-template-columns: repeat(4, 8px);
+    gap: 13px;
+    z-index: 1;
+}
+
+.dots-bottom {
+    position: absolute;
+    left: 28%;
+    bottom: 82px;
+    display: grid;
+    grid-template-columns: repeat(4, 8px);
+    gap: 15px;
+    z-index: 1;
+}
+
+.dots-left span,
+.dots-bottom span {
+    width: 8px;
+    height: 8px;
+    background: var(--black);
+}
+
+.left-side,
+.right-side {
+    position: relative;
+    z-index: 2;
+}
+
+.left-side {
+    width: 520px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.logo-box {
+    width: 130px;
+    height: 130px;
+    background: #fff;
+    border: 5px solid var(--black);
+    box-shadow: 8px 8px 0 var(--black);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.logo-box svg {
+    width: 88px;
+    height: 88px;
+}
+
+.brand-title {
+    line-height: 1;
+    font-weight: 900;
+}
+
+.auth-brand-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.auth-brand-small {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 9px;
+    line-height: .9;
+}
+
+.auth-brand-big {
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    line-height: .95;
+}
+
+.auth-brand-line {
+    width: 165px;
+    height: 6px;
+    background: var(--black);
+    margin-top: 10px;
+}
+
+.brand-line {
+    width: 100%;
+    height: 5px;
+    background: var(--black);
+    margin: 26px 0 25px;
+}
+
+.icon-strip {
+    width: 355px;
+    min-height: 86px;
+    margin-left: 78px;
+    margin-bottom: 34px;
+    background: var(--green);
+    border: 5px solid var(--black);
+    box-shadow: 8px 8px 0 var(--black);
+    display: grid;
+    grid-template-columns: 1fr 5px 1fr 5px 1fr 5px 1fr;
+    align-items: center;
+    justify-items: center;
+    padding: 10px 18px;
+}
+
+.strip-line {
+    width: 4px;
+    height: 52px;
+    background: var(--black);
+}
+
+.icon-strip svg {
+    width: 46px;
+    height: 46px;
+    stroke: var(--black);
+    stroke-width: 3.5;
+    fill: none;
+}
+
+.info-box {
+    width: 410px;
+    min-height: 112px;
+    background: var(--green);
+    border: 5px solid var(--black);
+    box-shadow: 9px 9px 0 var(--black);
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 16px 20px;
+}
+
+.shield-card {
+    width: 76px;
+    height: 76px;
+    background: #fff;
+    border: 5px solid var(--black);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+
+.shield-card svg {
+    width: 58px;
+    height: 58px;
+    stroke: var(--black);
+    stroke-width: 3.2;
+    fill: var(--green);
+}
+
+.info-text h3 {
+    margin: 0;
+    font-size: 21px;
+    line-height: 1.08;
+    font-weight: 900;
+}
+
+.info-text p {
+    margin: 8px 0 0;
+    max-width: 330px;
+    font-size: 14px;
+    line-height: 1.25;
+}
+
+.right-side {
+    width: 540px;
+}
+
+.reset-card {
+    width: 100%;
+    background: #fff;
+    border: 5px solid var(--black);
+    box-shadow: 13px 13px 0 var(--black);
+    padding: 24px 36px 30px;
+}
+
+.card-title {
+    width: 100%;
+    min-height: 64px;
+    margin: 0 auto 20px;
+    background: var(--yellow);
+    border: 5px solid var(--black);
+    box-shadow: 8px 8px 0 var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    font-size: 34px;
+    line-height: 1;
+    font-weight: 900;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.desc {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0 0 18px;
+}
+
+.alert {
+    border: 4px solid var(--black);
+    box-shadow: 5px 5px 0 var(--black);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-weight: 900;
+    font-size: 14px;
+}
+
+.alert.error {
+    background: var(--red);
+}
+
+.alert.success {
+    background: var(--green);
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 16px;
+    font-weight: 900;
+    margin-bottom: 7px;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-wrap input {
+    width: 100%;
+    height: 50px;
+    background: #fff;
+    border: 4px solid var(--black);
+    outline: none;
+    padding: 0 58px 0 52px;
+    font-size: 16px;
+}
+
+.input-wrap input:focus {
+    box-shadow: 5px 5px 0 var(--black);
+}
+
+.input-wrap input[readonly] {
+    background: #f3f3f3;
+    color: #555;
+    cursor: not-allowed;
+}
+
+.input-icon {
+    position: absolute;
+    left: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    stroke: var(--black);
+    stroke-width: 3.2;
+    fill: none;
+}
+
+.eye-btn {
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    padding: 0;
+}
+
+.eye-btn svg {
+    width: 27px;
+    height: 27px;
+    stroke: var(--black);
+    stroke-width: 3.2;
+    fill: none;
+}
+
+.error-text {
+    margin-top: 7px;
+    color: #b00000;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.save-btn {
+    width: 100%;
+    height: 58px;
+    background: var(--blue);
+    border: 5px solid var(--black);
+    box-shadow: 8px 8px 0 var(--black);
+    font-size: 21px;
+    font-weight: 900;
+    cursor: pointer;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.save-btn svg {
+    width: 28px;
+    height: 28px;
+    stroke: var(--black);
+    stroke-width: 3.2;
+    fill: none;
+}
+
+.save-btn:active {
+    transform: translate(5px, 5px);
+    box-shadow: 3px 3px 0 var(--black);
+}
+
+.back-link {
+    border-top: 4px solid var(--black);
+    margin-top: 28px;
+    padding-top: 16px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.back-link a {
+    color: #004cff;
+    font-weight: 900;
+}
+
+.back-link svg {
+    width: 28px;
+    height: 28px;
+    stroke: #004cff;
+    stroke-width: 3.5;
+    fill: none;
+}
+
+@media (max-width: 1400px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .reset-page {
+        min-height: 100vh;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        align-items: start;
+        gap: 30px;
+        padding: 36px 28px 120px;
+        overflow: hidden;
+    }
+
+    .left-side {
+        width: min(560px, 92vw);
+    }
+
+    .right-side {
+        width: min(540px, 92vw);
+    }
+
+    .brand {
+        justify-content: center;
+    }
+
+    .brand-line {
+        width: 100%;
+    }
+
+    .icon-strip {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .info-box {
+        width: min(470px, 100%);
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .small-green,
+    .dots-left,
+    .dots-bottom {
+        display: none;
+    }
+
+    .red-box {
+        right: 40px;
+        top: 112px;
+        width: 52px;
+        height: 52px;
+    }
+}
+
+@media (max-width: 620px) {
+    .reset-page {
+        border-width: 3px;
+        padding: 26px 16px 96px;
+        gap: 24px;
+    }
+
+    .corner-left {
+        width: 74px;
+    }
+
+    .corner-left span {
+        height: 35px;
+    }
+
+    .corner-left span:nth-child(1) {
+        width: 74px;
+    }
+
+    .corner-left span:nth-child(2) {
+        width: 50px;
+    }
+
+    .corner-left span:nth-child(3) {
+        width: 30px;
+    }
+
+    .corner-yellow {
+        width: 160px;
+    }
+
+    .corner-yellow span {
+        height: 40px;
+    }
+
+    .corner-yellow span:nth-child(1) {
+        width: 42px;
+    }
+
+    .corner-yellow span:nth-child(2) {
+        width: 92px;
+    }
+
+    .corner-yellow span:nth-child(3) {
+        width: 160px;
+    }
+
+    .corner-blue {
+        width: 96px;
+    }
+
+    .corner-blue span {
+        height: 46px;
+    }
+
+    .corner-blue span:nth-child(1) {
+        width: 32px;
+    }
+
+    .corner-blue span:nth-child(2) {
+        width: 64px;
+    }
+
+    .corner-blue span:nth-child(3) {
+        width: 96px;
+    }
+
+    .red-box {
+        display: none;
+    }
+
+    .left-side,
+    .right-side {
+        width: calc(100vw - 36px);
+    }
+
+    .brand {
+        gap: 14px;
+        justify-content: center;
+    }
+
+    .logo-box {
+        width: 84px;
+        height: 84px;
+        border-width: 4px;
+        box-shadow: 6px 6px 0 var(--black);
+    }
+
+    .logo-box svg {
+        width: 58px;
+        height: 58px;
+    }
+
+    .brand-title {
+        font-size: 29px;
+    }
+
+    .brand-line {
+        height: 4px;
+        margin: 22px 0 20px;
+    }
+
+    .icon-strip {
+        width: 100%;
+        min-height: 70px;
+        margin-bottom: 24px;
+        padding: 8px 12px;
+        border-width: 4px;
+        box-shadow: 6px 6px 0 var(--black);
+    }
+
+    .icon-strip svg {
+        width: 34px;
+        height: 34px;
+    }
+
+    .strip-line {
+        height: 42px;
+    }
+
+    .info-box {
+        grid-template-columns: 64px 1fr;
+        gap: 12px;
+        padding: 14px;
+        border-width: 4px;
+        box-shadow: 7px 7px 0 var(--black);
+    }
+
+    .shield-card {
+        width: 58px;
+        height: 58px;
+        border-width: 4px;
+    }
+
+    .shield-card svg {
+        width: 44px;
+        height: 44px;
+    }
+
+    .info-text h3 {
+        font-size: 17px;
+    }
+
+    .info-text p {
+        font-size: 12.5px;
+        margin-top: 6px;
+        max-width: 100%;
+    }
+
+    .reset-card {
+        border-width: 4px;
+        box-shadow: 9px 9px 0 var(--black);
+        padding: 24px 20px;
+    }
+
+    .card-title {
+        min-height: 58px;
+        font-size: 28px;
+        border-width: 4px;
+        box-shadow: 6px 6px 0 var(--black);
+        margin-bottom: 20px;
+        padding: 8px 12px;
+        white-space: normal;
+    }
+
+    .desc {
+        font-size: 15px;
+    }
+
+    .form-label {
+        font-size: 15px;
+    }
+
+    .input-wrap input {
+        height: 52px;
+        border-width: 3px;
+        font-size: 15px;
+        padding-left: 48px;
+    }
+
+    .input-icon {
+        left: 14px;
+        width: 24px;
+        height: 24px;
+    }
+
+    .save-btn {
+        height: 58px;
+        border-width: 4px;
+        box-shadow: 6px 6px 0 var(--black);
+        font-size: 19px;
+    }
+
+    .back-link {
+        font-size: 15px;
+        margin-top: 24px;
+    }
+}
+
+@media (max-width: 430px) {
+    .reset-page {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .left-side,
+    .right-side {
+        width: calc(100vw - 36px);
+    }
+
+    .brand {
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .logo-box {
+        width: 72px;
+        height: 72px;
+    }
+
+    .logo-box svg {
+        width: 50px;
+        height: 50px;
+    }
+
+    .brand-title {
+        font-size: 24px;
+    }
+
+    .icon-strip {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .strip-line {
+        display: none;
+    }
+
+    .info-box {
+        grid-template-columns: 1fr;
+        text-align: center;
+        justify-items: center;
+    }
+
+    .info-text h3 {
+        font-size: 17px;
+    }
+
+    .reset-card {
+        padding: 22px 16px;
+    }
+
+    .card-title {
+        font-size: 24px;
+    }
+
+    .save-btn {
+        font-size: 18px;
+    }
+
+    .back-link {
+        font-size: 14px;
+    }
+}
+</style>
+@endsection
+
+@section('content')
+<div class="reset-page">
+
+    <div class="corner-left">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="corner-yellow">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="corner-blue">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="red-box"></div>
+    <div class="small-green"></div>
+
+    <div class="dots-left">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="dots-bottom">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+    </div>
+
+    <section class="left-side">
+        <div class="brand">
+            <div class="logo-box">
+                <svg viewBox="0 0 100 100">
+                    <path d="M38 8H62V38H92V62H62V92H38V62H8V38H38Z"
+                          fill="#8be8b0" stroke="#000" stroke-width="7" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <div class="brand-title auth-brand-title">
+                <span class="auth-brand-small">KLINIK</span>
+                <span class="auth-brand-big">SEHATI</span>
+                <span class="auth-brand-line"></span>
+            </div>
+        </div>
+
+        <div class="brand-line"></div>
+
+        <div class="icon-strip">
+            <svg viewBox="0 0 64 64">
+                <rect x="17" y="12" width="30" height="44" rx="3"></rect>
+                <path d="M25 12h14v-4H25z"></path>
+                <path d="M32 24v14M25 31h14"></path>
+                <path d="M24 44h16"></path>
+            </svg>
+
+            <div class="strip-line"></div>
+
+            <svg viewBox="0 0 64 64">
+                <path d="M32 6L54 14V29C54 45 43 56 32 60C21 56 10 45 10 29V14L32 6Z"></path>
+                <path d="M22 32L29 39L43 23"></path>
+            </svg>
+
+            <div class="strip-line"></div>
+
+            <svg viewBox="0 0 64 64">
+                <path d="M32 52S10 39 10 23c0-8 6-13 13-13 5 0 8 3 9 6 1-3 4-6 9-6 7 0 13 5 13 13 0 16-22 29-22 29z"></path>
+                <path d="M16 32h10l4-10 6 20 5-10h7"></path>
+            </svg>
+
+            <div class="strip-line"></div>
+
+            <svg viewBox="0 0 64 64">
+                <rect x="24" y="14" width="16" height="40" rx="3"></rect>
+                <path d="M27 14V8h10v6"></path>
+                <path d="M32 28v14M26 35h12"></path>
+            </svg>
+        </div>
+
+        <div class="info-box">
+            <div class="shield-card">
+                <svg viewBox="0 0 64 64">
+                    <path d="M32 6L54 14V29C54 45 43 56 32 60C21 56 10 45 10 29V14L32 6Z"></path>
+                    <path d="M22 32L29 39L43 23"></path>
+                </svg>
+            </div>
+
+            <div class="info-text">
+                <h3>Password Aman</h3>
+                <p>Gunakan minimal 6 karakter</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="right-side">
+        <div class="reset-card">
+            <div class="card-title">Reset Password</div>
+
+            <p class="desc">
+                Buat password baru untuk akun kamu.
+            </p>
+
+            @if(session('error'))
+                <div class="alert error">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="alert success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert error">
+                    Periksa lagi data password kamu.
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('password.otp.reset') }}">
+                @csrf
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+
+                    <div class="input-wrap">
+                        <svg class="input-icon" viewBox="0 0 64 64">
+                            <rect x="8" y="16" width="48" height="34" rx="3"></rect>
+                            <path d="M8 20l24 18 24-18"></path>
+                        </svg>
+
+                        <input
+                            type="email"
+                            value="{{ $email ?? session('reset_verified_email') }}"
+                            readonly
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password Baru</label>
+
+                    <div class="input-wrap">
+                        <svg class="input-icon" viewBox="0 0 64 64">
+                            <rect x="14" y="28" width="36" height="27" rx="4"></rect>
+                            <path d="M22 28V18a10 10 0 0 1 20 0v10"></path>
+                            <path d="M32 39v7"></path>
+                        </svg>
+
+                        <input
+                            id="passwordInput"
+                            type="password"
+                            name="password"
+                            required
+                        >
+
+                        <button type="button" class="eye-btn" onclick="togglePassword('passwordInput', 'eyeOpen1', 'eyeClosed1')">
+                            <svg id="eyeOpen1" viewBox="0 0 64 64">
+                                <path d="M6 32s10-16 26-16 26 16 26 16-10 16-26 16S6 32 6 32z"></path>
+                                <circle cx="32" cy="32" r="7"></circle>
+                            </svg>
+
+                            <svg id="eyeClosed1" viewBox="0 0 64 64" style="display:none;">
+                                <path d="M6 32s10-16 26-16 26 16 26 16-10 16-26 16S6 32 6 32z"></path>
+                                <circle cx="32" cy="32" r="7"></circle>
+                                <path d="M12 56L56 8"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    @error('password')
+                        <div class="error-text">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Konfirmasi Password</label>
+
+                    <div class="input-wrap">
+                        <svg class="input-icon" viewBox="0 0 64 64">
+                            <rect x="14" y="28" width="36" height="27" rx="4"></rect>
+                            <path d="M22 28V18a10 10 0 0 1 20 0v10"></path>
+                            <path d="M32 39v7"></path>
+                        </svg>
+
+                        <input
+                            id="passwordConfirmInput"
+                            type="password"
+                            name="password_confirmation"
+                            required
+                        >
+
+                        <button type="button" class="eye-btn" onclick="togglePassword('passwordConfirmInput', 'eyeOpen2', 'eyeClosed2')">
+                            <svg id="eyeOpen2" viewBox="0 0 64 64">
+                                <path d="M6 32s10-16 26-16 26 16 26 16-10 16-26 16S6 32 6 32z"></path>
+                                <circle cx="32" cy="32" r="7"></circle>
+                            </svg>
+
+                            <svg id="eyeClosed2" viewBox="0 0 64 64" style="display:none;">
+                                <path d="M6 32s10-16 26-16 26 16 26 16-10 16-26 16S6 32 6 32z"></path>
+                                <circle cx="32" cy="32" r="7"></circle>
+                                <path d="M12 56L56 8"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="save-btn">
+                    <svg viewBox="0 0 64 64">
+                        <rect x="14" y="28" width="36" height="27" rx="4"></rect>
+                        <path d="M22 28V18a10 10 0 0 1 20 0v10"></path>
+                        <path d="M32 39v7"></path>
+                    </svg>
+                    <span>Simpan Password</span>
+                </button>
+            </form>
+
+            <div class="back-link">
+                <svg viewBox="0 0 64 64">
+                    <path d="M36 14L18 32L36 50"></path>
+                    <path d="M20 32H54"></path>
+                </svg>
+
+                <a href="{{ route('login') }}">Kembali ke Login</a>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+function togglePassword(inputId, eyeOpenId, eyeClosedId) {
+    const input = document.getElementById(inputId);
+    const eyeOpen = document.getElementById(eyeOpenId);
+    const eyeClosed = document.getElementById(eyeClosedId);
+
+    if (!input || !eyeOpen || !eyeClosed) {
+        return;
+    }
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        eyeOpen.style.display = 'none';
+        eyeClosed.style.display = 'block';
+    } else {
+        input.type = 'password';
+        eyeOpen.style.display = 'block';
+        eyeClosed.style.display = 'none';
+    }
+}
+</script>
+@endsection
