@@ -113,10 +113,10 @@ class AuthController extends Controller
         ]);
 
         Mail::raw(
-            "Kode OTP reset password kamu adalah: {$otp}\n\nKode ini berlaku selama 10 menit.\n\nJangan berikan kode ini kepada siapa pun.",
+            "Halo,\n\nKode OTP untuk reset password akun Klinik Sehati Anda adalah: $otp\n\nKode ini bersifat rahasia. Jangan berikan kode ini kepada siapa pun.\n\nTerima kasih,\nKlinik Sehati",
             function ($message) use ($request) {
                 $message->to($request->email)
-                    ->subject('Kode OTP Reset Password - Sistem Informasi Klinik');
+                        ->subject('Kode OTP Reset Password Klinik Sehati');
             }
         );
 

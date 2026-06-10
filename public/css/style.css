@@ -8285,63 +8285,26 @@ body {
     background: var(--green);
 }
 /* =========================================================
-   FINAL MOBILE RESPONSIVE FIX - KLINIK SEHATI
+
+/* =========================================================
+   PATCH AMAN NON-AUTH - KLINIK SEHATI
    Tempel di PALING BAWAH public/css/style.css
-   atau pakai file full replacement yang sudah digabung.
+   Catatan:
+   - Tidak menyentuh halaman login/register/reset password.
+   - Tidak mengubah tulisan/button auth.
+   - Fokus hanya dashboard, table, dan tombol aksi di mobile.
 ========================================================= */
 
-/* ---------- GLOBAL SAFETY ---------- */
-html,
-body {
+/* Biar halaman app tidak melebar horizontal */
+.admin-page,
+.main,
+.admin-content {
     max-width: 100%;
 }
 
-body {
-    overflow-x: hidden !important;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-img,
-svg {
-    flex-shrink: 0;
-}
-
-svg {
-    stroke: var(--black);
-    fill: none;
-}
-
-/* Supaya konten tidak melebar gara-gara table/card */
-.main,
-.admin-content,
-.dashboard-content,
-.data-pasien-content,
-.data-dokter-content,
-.data-poli-content,
-.data-jadwal-content,
-.data-pendaftaran-content,
-.data-laporan-content,
-.dokter-dashboard-content,
-.dokter-jadwal-content,
-.dokter-pemeriksaan-content,
-.dokter-laporan-content,
-.pasien-dashboard-content,
-.pasien-jadwal-content,
-.pasien-pendaftaran-content,
-.pasien-riwayat-content,
-.profile-content,
-.dokter-profile-content,
-.pasien-profile-content {
-    min-width: 0 !important;
-    max-width: 100% !important;
-}
-
-/* ---------- TABLE SCROLL UMUM ---------- */
-.table-wrap,
+/* Table umum boleh scroll horizontal */
 .table-box,
+.table-wrap,
 .poli-table-wrap,
 .jadwal-table-wrap,
 .pendaftaran-table-wrap,
@@ -8350,274 +8313,149 @@ svg {
 .pasien-jadwal-table-wrap,
 .pasien-pendaftaran-table-wrap,
 .pasien-riwayat-table-wrap {
-    max-width: 100% !important;
-    overflow-x: auto !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
 }
 
-.table-wrap table,
-.table-box table,
-.poli-table,
-.jadwal-table,
-.pendaftaran-table,
-.laporan-table,
-.dokter-table,
-.pasien-jadwal-table,
-.pasien-pendaftaran-table,
-.pasien-riwayat-table {
-    border-collapse: collapse !important;
+/* Tombol aksi tetap bentuk neo-brutalism dan tidak gepeng */
+.action-cell,
+.dokter-action-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: nowrap;
 }
 
-/* Scrollbar biar kelihatan */
-.table-wrap::-webkit-scrollbar,
-.table-box::-webkit-scrollbar,
-.poli-table-wrap::-webkit-scrollbar,
-.jadwal-table-wrap::-webkit-scrollbar,
-.pendaftaran-table-wrap::-webkit-scrollbar,
-.laporan-table-wrap::-webkit-scrollbar,
-.dokter-table-wrap::-webkit-scrollbar,
-.pasien-jadwal-table-wrap::-webkit-scrollbar,
-.pasien-pendaftaran-table-wrap::-webkit-scrollbar,
-.pasien-riwayat-table-wrap::-webkit-scrollbar {
-    height: 10px;
-    width: 10px;
+.action-cell form,
+.dokter-action-cell form {
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
 }
 
-.table-wrap::-webkit-scrollbar-track,
-.table-box::-webkit-scrollbar-track,
-.poli-table-wrap::-webkit-scrollbar-track,
-.jadwal-table-wrap::-webkit-scrollbar-track,
-.pendaftaran-table-wrap::-webkit-scrollbar-track,
-.laporan-table-wrap::-webkit-scrollbar-track,
-.dokter-table-wrap::-webkit-scrollbar-track,
-.pasien-jadwal-table-wrap::-webkit-scrollbar-track,
-.pasien-pendaftaran-table-wrap::-webkit-scrollbar-track,
-.pasien-riwayat-table-wrap::-webkit-scrollbar-track {
-    background: #fff;
-    border: 2px solid var(--black);
-}
-
-.table-wrap::-webkit-scrollbar-thumb,
-.table-box::-webkit-scrollbar-thumb,
-.poli-table-wrap::-webkit-scrollbar-thumb,
-.jadwal-table-wrap::-webkit-scrollbar-thumb,
-.pendaftaran-table-wrap::-webkit-scrollbar-thumb,
-.laporan-table-wrap::-webkit-scrollbar-thumb,
-.dokter-table-wrap::-webkit-scrollbar-thumb,
-.pasien-jadwal-table-wrap::-webkit-scrollbar-thumb,
-.pasien-pendaftaran-table-wrap::-webkit-scrollbar-thumb,
-.pasien-riwayat-table-wrap::-webkit-scrollbar-thumb {
-    background: var(--blue);
-    border: 2px solid var(--black);
+.action-btn,
+.dokter-action-btn,
+.pasien-jadwal-action-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 /* =========================================================
-   TABLET
-========================================================= */
-@media (max-width: 1100px) {
-    .stat-grid,
-    .bottom-grid,
-    .dashboard-grid,
-    .data-dokter-content .stat-row,
-    .data-pasien-content .stat-row,
-    .data-poli-content .stat-row,
-    .data-jadwal-content .stat-row,
-    .data-pendaftaran-content .stat-row,
-    .data-laporan-content .stat-row,
-    .dokter-stat-row,
-    .pasien-jadwal-stat-row,
-    .pasien-pendaftaran-stat-row,
-    .pasien-riwayat-stat-row {
-        grid-template-columns: 1fr !important;
-    }
-
-    .quick-list {
-        display: flex !important;
-        flex-direction: column !important;
-    }
-}
-
-/* =========================================================
-   MOBILE UTAMA
+   MOBILE NON-AUTH
 ========================================================= */
 @media (max-width: 900px) {
-    html,
-    body {
-        width: 100% !important;
-        min-height: 100% !important;
-        overflow-x: hidden !important;
-        overflow-y: hidden !important;
-    }
-
+    /* Khusus layout aplikasi setelah login */
     .admin-page {
-        width: 100% !important;
-        min-height: 100svh !important;
-        height: 100svh !important;
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        border: 4px solid var(--black) !important;
-        overflow: hidden !important;
+        width: 100vw;
+        min-height: 100vh;
+        height: 100vh;
+        grid-template-columns: 1fr;
+        overflow: hidden;
     }
 
     .main {
-        width: 100% !important;
-        min-width: 0 !important;
-        overflow: hidden !important;
+        width: 100%;
+        min-width: 0;
+        overflow: hidden;
     }
 
     .admin-content {
-        width: 100% !important;
-        height: calc(100svh - 92px) !important;
-        padding: 14px !important;
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        background: var(--white) !important;
+        height: calc(100vh - 96px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 14px;
     }
 
-    /* ---------- SIDEBAR MOBILE ---------- */
+    /* Sidebar mobile */
     .sidebar {
-        position: fixed !important;
-        top: 0 !important;
-        left: -285px !important;
-        width: 270px !important;
-        max-width: 82vw !important;
-        height: 100svh !important;
-        z-index: 1000 !important;
-        transition: left .25s ease !important;
-        border-right: 4px solid var(--black) !important;
-        box-shadow: 8px 0 0 var(--black) !important;
-        overflow-y: auto !important;
+        position: fixed;
+        top: 0;
+        left: -290px;
+        width: 270px;
+        max-width: 82vw;
+        height: 100vh;
+        z-index: 1000;
+        transition: left .25s ease;
+        overflow-y: auto;
     }
 
     .sidebar.show {
-        left: 0 !important;
-    }
-
-    .sidebar-overlay {
-        display: none !important;
-        position: fixed !important;
-        inset: 0 !important;
-        background: rgba(0, 0, 0, .35) !important;
-        z-index: 900 !important;
+        left: 0;
     }
 
     .sidebar-overlay.show {
-        display: block !important;
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, .35);
+        z-index: 900;
     }
 
-    .sidebar-brand {
-        height: 100px !important;
-        padding: 12px !important;
-    }
-
-    .brand-logo {
-        width: 66px !important;
-        height: 66px !important;
-    }
-
-    .brand-logo svg {
-        width: 44px !important;
-        height: 44px !important;
-    }
-
-    .brand-small {
-        font-size: 13px !important;
-    }
-
-    .brand-big {
-        font-size: 28px !important;
-    }
-
-    .menu-link {
-        min-height: 52px !important;
-        font-size: 15px !important;
-    }
-
-    .menu-link svg {
-        width: 28px !important;
-        height: 28px !important;
-    }
-
-    /* ---------- TOPBAR MOBILE ---------- */
+    /* Topbar mobile */
     .topbar {
-        width: 100% !important;
-        height: 92px !important;
-        min-height: 92px !important;
-        padding: 0 12px !important;
-        gap: 12px !important;
-        display: grid !important;
-        grid-template-columns: 58px minmax(0, 1fr) 58px !important;
-        align-items: center !important;
-        overflow: hidden !important;
+        height: 96px;
+        padding: 0 14px;
+        gap: 12px;
+        display: grid;
+        grid-template-columns: 58px minmax(0, 1fr) 58px;
+        align-items: center;
     }
 
     .hamburger {
-        width: 54px !important;
-        height: 54px !important;
-        box-shadow: 5px 5px 0 var(--black) !important;
-    }
-
-    .hamburger svg {
-        width: 30px !important;
-        height: 30px !important;
+        width: 54px;
+        height: 54px;
     }
 
     .header-title {
-        min-width: 0 !important;
-        overflow: hidden !important;
+        min-width: 0;
+        overflow: hidden;
     }
 
     .header-title h1 {
-        margin: 0 !important;
-        font-size: 24px !important;
-        line-height: 1.05 !important;
-        white-space: normal !important;
-        overflow-wrap: anywhere !important;
+        font-size: 24px;
+        line-height: 1.05;
+        white-space: normal;
+        overflow-wrap: anywhere;
     }
 
     .header-title p {
-        margin: 6px 0 0 !important;
-        font-size: 14px !important;
-        line-height: 1.2 !important;
-        white-space: normal !important;
-        overflow-wrap: anywhere !important;
+        font-size: 14px;
+        line-height: 1.2;
+        white-space: normal;
+        overflow-wrap: anywhere;
     }
 
     .profile-area {
-        width: 58px !important;
-        justify-self: end !important;
-        margin-left: 0 !important;
+        width: 58px;
+        justify-self: end;
+        margin-left: 0;
     }
 
     .profile-button {
-        width: 54px !important;
-        height: 54px !important;
-        padding: 0 !important;
-        justify-content: center !important;
-        box-shadow: 5px 5px 0 var(--black) !important;
+        width: 54px;
+        height: 54px;
+        padding: 0;
+        justify-content: center;
     }
 
     .profile-button span,
     .profile-button svg:last-child {
-        display: none !important;
+        display: none;
     }
 
     .profile-button svg:first-child {
-        display: block !important;
-        width: 29px !important;
-        height: 29px !important;
+        display: block;
     }
 
     .profile-menu {
-        position: fixed !important;
-        top: 94px !important;
-        right: 12px !important;
-        width: min(270px, calc(100vw - 24px)) !important;
-        z-index: 1200 !important;
+        position: fixed;
+        top: 86px;
+        right: 12px;
+        width: min(270px, calc(100vw - 24px));
+        z-index: 1200;
     }
 
-    /* ---------- CONTENT WRAPPER ---------- */
+    /* Wrapper halaman setelah login */
     .dashboard-content,
     .data-pasien-content,
     .data-dokter-content,
@@ -8633,24 +8471,17 @@ svg {
     .pasien-jadwal-content,
     .pasien-pendaftaran-content,
     .pasien-riwayat-content,
-    .profile-content,
-    .dokter-profile-content,
-    .pasien-profile-content {
-        width: 100% !important;
-        height: auto !important;
-        min-height: 100% !important;
-        overflow: visible !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 14px !important;
+    .profile-content {
+        width: 100%;
+        height: auto;
+        min-height: 100%;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
     }
 
-    .dashboard-inner {
-        width: 100% !important;
-        gap: 14px !important;
-    }
-
-    /* ---------- TOOLBAR SEARCH STACK ---------- */
+    /* Toolbar stack di mobile */
     .toolbar,
     .data-pasien-content .toolbar,
     .data-dokter-content .toolbar,
@@ -8662,36 +8493,19 @@ svg {
     .pasien-jadwal-toolbar,
     .pasien-pendaftaran-toolbar,
     .pasien-riwayat-toolbar {
-        width: 100% !important;
-        height: auto !important;
-        min-height: unset !important;
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: 12px !important;
-        padding: 14px !important;
-        overflow: visible !important;
-    }
-
-    .search-box,
-    .dokter-search-box,
-    .pasien-jadwal-search,
-    .pasien-pendaftaran-search,
-    .pasien-riwayat-search {
-        width: 100% !important;
-        min-width: 0 !important;
+        height: auto;
+        min-height: unset;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 12px;
     }
 
     .search-box input,
     .dokter-search-box input,
     .pasien-jadwal-search input,
     .pasien-pendaftaran-search input,
-    .pasien-riwayat-search input {
-        width: 100% !important;
-        height: 52px !important;
-        font-size: 15px !important;
-        padding-left: 54px !important;
-    }
-
+    .pasien-riwayat-search input,
     .search-btn,
     .add-btn,
     .dokter-search-btn,
@@ -8699,17 +8513,15 @@ svg {
     .pasien-pendaftaran-search-btn,
     .pasien-pendaftaran-add-btn,
     .pasien-riwayat-search-btn {
-        width: 100% !important;
-        height: 52px !important;
-        min-height: 52px !important;
-        font-size: 16px !important;
+        width: 100%;
+        height: 48px;
     }
 
-    /* ---------- STAT CARD STACK ---------- */
+    /* Stat card stack */
     .stat-grid,
     .stat-row,
-    .data-dokter-content .stat-row,
     .data-pasien-content .stat-row,
+    .data-dokter-content .stat-row,
     .data-poli-content .stat-row,
     .data-jadwal-content .stat-row,
     .data-pendaftaran-content .stat-row,
@@ -8718,16 +8530,15 @@ svg {
     .pasien-jadwal-stat-row,
     .pasien-pendaftaran-stat-row,
     .pasien-riwayat-stat-row {
-        width: 100% !important;
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: 14px !important;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
     }
 
     .stat-card,
     .dashboard-content .stat-card,
-    .data-dokter-content .stat-card,
     .data-pasien-content .stat-card,
+    .data-dokter-content .stat-card,
     .data-poli-content .stat-card,
     .data-jadwal-content .stat-card,
     .data-pendaftaran-content .stat-card,
@@ -8736,88 +8547,16 @@ svg {
     .pasien-jadwal-stat-card,
     .pasien-pendaftaran-stat-card,
     .pasien-riwayat-stat-card {
-        width: 100% !important;
-        height: auto !important;
-        min-height: 96px !important;
-        display: grid !important;
-        grid-template-columns: 70px minmax(0, 1fr) !important;
-        gap: 12px !important;
-        align-items: center !important;
-        padding: 12px 14px !important;
-        overflow: hidden !important;
+        width: 100%;
+        height: auto;
+        min-height: 90px;
     }
 
-    .stat-icon,
-    .dashboard-content .stat-icon,
-    .data-dokter-content .stat-icon,
-    .data-pasien-content .stat-icon,
-    .data-poli-content .stat-icon,
-    .data-jadwal-content .stat-icon,
-    .data-pendaftaran-content .stat-icon,
-    .data-laporan-content .stat-icon,
-    .dokter-stat-icon,
-    .pasien-jadwal-stat-icon,
-    .pasien-pendaftaran-stat-icon,
-    .pasien-riwayat-stat-icon {
-        width: 56px !important;
-        height: 64px !important;
-        place-self: center !important;
-    }
-
-    .stat-icon svg,
-    .dashboard-content .stat-icon svg,
-    .data-dokter-content .stat-icon svg,
-    .data-pasien-content .stat-icon svg,
-    .data-poli-content .stat-icon svg,
-    .data-jadwal-content .stat-icon svg,
-    .data-pendaftaran-content .stat-icon svg,
-    .data-laporan-content .stat-icon svg,
-    .dokter-stat-icon svg,
-    .pasien-jadwal-stat-icon svg,
-    .pasien-pendaftaran-stat-icon svg,
-    .pasien-riwayat-stat-icon svg {
-        width: 32px !important;
-        height: 32px !important;
-    }
-
-    .stat-label,
-    .dashboard-content .stat-label,
-    .data-dokter-content .stat-label,
-    .data-pasien-content .stat-label,
-    .data-poli-content .stat-label,
-    .data-jadwal-content .stat-label,
-    .data-pendaftaran-content .stat-label,
-    .data-laporan-content .stat-label,
-    .dokter-stat-label,
-    .pasien-jadwal-stat-label,
-    .pasien-pendaftaran-stat-label,
-    .pasien-riwayat-stat-label {
-        font-size: 15px !important;
-        line-height: 1.15 !important;
-        overflow-wrap: anywhere !important;
-    }
-
-    .stat-number,
-    .dashboard-content .stat-number,
-    .data-dokter-content .stat-number,
-    .data-pasien-content .stat-number,
-    .data-poli-content .stat-number,
-    .data-jadwal-content .stat-number,
-    .data-pendaftaran-content .stat-number,
-    .data-laporan-content .stat-number,
-    .dokter-stat-number,
-    .pasien-jadwal-stat-number,
-    .pasien-pendaftaran-stat-number,
-    .pasien-riwayat-stat-number {
-        font-size: 34px !important;
-        line-height: 1 !important;
-    }
-
-    /* ---------- PANEL ---------- */
+    /* Panel */
     .panel,
     .dashboard-content .panel,
-    .data-dokter-content .panel,
     .data-pasien-content .panel,
+    .data-dokter-content .panel,
     .data-poli-content .panel,
     .data-jadwal-content .jadwal-panel,
     .data-pendaftaran-content .pendaftaran-panel,
@@ -8826,38 +8565,15 @@ svg {
     .pasien-jadwal-panel,
     .pasien-pendaftaran-panel,
     .pasien-riwayat-panel {
-        width: 100% !important;
-        min-width: 0 !important;
-        min-height: 300px !important;
-        padding: 14px !important;
-        overflow: hidden !important;
+        width: 100%;
+        min-width: 0;
+        min-height: 280px;
+        overflow: hidden;
     }
 
-    .panel-title,
-    .dashboard-content .panel-title,
-    .data-dokter-content .panel-title,
-    .data-pasien-content .panel-title,
-    .data-poli-content .panel-title,
-    .data-jadwal-content .panel-title,
-    .data-pendaftaran-content .panel-title,
-    .data-laporan-content .panel-title,
-    .dokter-panel-title,
-    .pasien-jadwal-panel-title,
-    .pasien-pendaftaran-panel-title,
-    .pasien-riwayat-panel-title {
-        max-width: 100% !important;
-        width: fit-content !important;
-        height: auto !important;
-        min-height: 40px !important;
-        padding: 8px 14px !important;
-        font-size: 17px !important;
-        line-height: 1.15 !important;
-        overflow-wrap: anywhere !important;
-    }
-
-    /* ---------- TABLE MOBILE: PAKAI HORIZONTAL SCROLL ---------- */
-    .table-wrap,
+    /* Table scroll horizontal */
     .table-box,
+    .table-wrap,
     .poli-table-wrap,
     .jadwal-table-wrap,
     .pendaftaran-table-wrap,
@@ -8866,407 +8582,114 @@ svg {
     .pasien-jadwal-table-wrap,
     .pasien-pendaftaran-table-wrap,
     .pasien-riwayat-table-wrap {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-height: 220px !important;
-        overflow-x: auto !important;
-        overflow-y: auto !important;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
-    .table-wrap table,
-    .table-box table,
-    .poli-table,
-    .jadwal-table,
-    .pendaftaran-table,
-    .laporan-table,
+    .dashboard-content table,
+    .data-pasien-content table,
+    .data-dokter-content table,
+    .data-poli-content table,
+    .data-jadwal-content table,
+    .data-pendaftaran-content table,
+    .data-laporan-content table,
     .dokter-table,
     .pasien-jadwal-table,
     .pasien-pendaftaran-table,
     .pasien-riwayat-table {
-        width: 720px !important;
-        min-width: 720px !important;
-        table-layout: fixed !important;
+        width: 760px;
+        min-width: 760px;
+        table-layout: fixed;
     }
 
-    th,
-    td,
-    .dashboard-content th,
-    .dashboard-content td,
-    .data-pasien-content th,
-    .data-pasien-content td,
-    .data-dokter-content th,
-    .data-dokter-content td,
-    .data-poli-content th,
-    .data-poli-content td,
-    .data-jadwal-content th,
-    .data-jadwal-content td,
-    .data-pendaftaran-content th,
-    .data-pendaftaran-content td,
-    .data-laporan-content th,
-    .data-laporan-content td,
-    .dokter-table th,
-    .dokter-table td,
-    .pasien-jadwal-table th,
-    .pasien-jadwal-table td,
-    .pasien-pendaftaran-table th,
-    .pasien-pendaftaran-table td,
-    .pasien-riwayat-table th,
-    .pasien-riwayat-table td {
-        font-size: 13px !important;
-        height: 52px !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+    /* Kolom aksi supaya tombol tidak numpuk */
+    .data-pasien-content th:last-child,
+    .data-pasien-content td:last-child,
+    .data-dokter-content th:last-child,
+    .data-dokter-content td:last-child,
+    .data-poli-content th:last-child,
+    .data-poli-content td:last-child,
+    .data-jadwal-content th:last-child,
+    .data-jadwal-content td:last-child,
+    .data-pendaftaran-content th:last-child,
+    .data-pendaftaran-content td:last-child,
+    .dokter-table th:last-child,
+    .dokter-table td:last-child {
+        width: 175px;
+        min-width: 175px;
     }
 
     .action-cell,
     .dokter-action-cell {
-        min-width: 150px !important;
-        gap: 8px !important;
-        flex-wrap: nowrap !important;
+        min-width: 150px;
+        gap: 8px;
+        flex-wrap: nowrap;
     }
 
-    /* ---------- DASHBOARD PATIENT / DOCTOR QUICK MENU ---------- */
+    .action-btn,
+    .dokter-action-btn,
+    .pasien-jadwal-action-btn {
+        width: auto;
+        min-width: 68px;
+        height: 32px;
+        min-height: 32px;
+        padding: 0 8px;
+        font-size: 10.5px;
+        line-height: 1;
+    }
+
     .bottom-grid,
     .dashboard-grid,
-    .pasien-dashboard-content .dashboard-grid {
-        width: 100% !important;
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: 14px !important;
-    }
-
     .quick-list {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 14px !important;
-    }
-
-    .quick-action,
-    .pasien-dashboard-content .quick-action {
-        width: 100% !important;
-        min-height: 68px !important;
-        grid-template-columns: 64px minmax(0, 1fr) 46px !important;
-    }
-
-    .quick-text {
-        font-size: 15px !important;
-        padding-left: 14px !important;
-        white-space: normal !important;
-        overflow-wrap: anywhere !important;
-    }
-
-    /* ---------- FORM MOBILE ---------- */
-    .patient-form-grid,
-    .doctor-form-grid,
-    .poli-form-grid,
-    .jadwal-form-grid,
-    .pendaftaran-form-grid,
-    .pasien-form-grid,
-    .dokter-form-grid,
-    .profile-grid,
-    .dokter-profile-grid,
-    .pasien-profile-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    .patient-form-card,
-    .doctor-form-card,
-    .poli-form-card,
-    .jadwal-form-card,
-    .pendaftaran-form-card,
-    .pasien-form-card,
-    .dokter-form-card,
-    .profile-content .panel,
-    .dokter-profile-card,
-    .pasien-profile-card {
-        width: 100% !important;
-        padding: 14px !important;
-        overflow: hidden !important;
-    }
-
-    .patient-form-actions,
-    .doctor-form-actions,
-    .poli-form-actions,
-    .jadwal-form-actions,
-    .pendaftaran-form-actions,
-    .pasien-form-actions,
-    .dokter-form-actions {
-        flex-direction: column !important;
-    }
-
-    .patient-form-btn,
-    .doctor-form-btn,
-    .poli-form-btn,
-    .jadwal-form-btn,
-    .pendaftaran-form-btn,
-    .pasien-form-btn,
-    .dokter-form-btn {
-        width: 100% !important;
+        grid-template-columns: 1fr;
     }
 }
 
 /* =========================================================
-   HP KECIL
+   HP KECIL NON-AUTH
 ========================================================= */
 @media (max-width: 520px) {
-    .admin-page {
-        border-width: 3px !important;
-    }
-
     .topbar {
-        height: 88px !important;
-        min-height: 88px !important;
-        grid-template-columns: 54px minmax(0, 1fr) 54px !important;
-        padding: 0 9px !important;
-        gap: 9px !important;
+        height: 88px;
+        grid-template-columns: 54px minmax(0, 1fr) 54px;
+        padding: 0 10px;
+        gap: 10px;
     }
 
     .admin-content {
-        height: calc(100svh - 88px) !important;
-        padding: 12px !important;
+        height: calc(100vh - 88px);
+        padding: 12px;
     }
 
     .hamburger,
     .profile-button {
-        width: 50px !important;
-        height: 50px !important;
-        box-shadow: 4px 4px 0 var(--black) !important;
-    }
-
-    .hamburger svg,
-    .profile-button svg:first-child {
-        width: 27px !important;
-        height: 27px !important;
+        width: 50px;
+        height: 50px;
     }
 
     .header-title h1 {
-        font-size: 21px !important;
-        line-height: 1.05 !important;
+        font-size: 21px;
     }
 
     .header-title p {
-        font-size: 12.5px !important;
-        line-height: 1.2 !important;
+        font-size: 12.5px;
     }
 
-    .toolbar,
-    .data-pasien-content .toolbar,
-    .data-dokter-content .toolbar,
-    .data-poli-content .toolbar,
-    .data-jadwal-content .toolbar,
-    .data-pendaftaran-content .toolbar,
-    .data-laporan-content .toolbar,
-    .dokter-toolbar,
-    .pasien-jadwal-toolbar,
-    .pasien-pendaftaran-toolbar,
-    .pasien-riwayat-toolbar {
-        padding: 12px !important;
-        border-width: 3px !important;
-        box-shadow: 5px 5px 0 var(--black) !important;
-    }
-
-    .stat-card,
-    .dashboard-content .stat-card,
-    .data-dokter-content .stat-card,
-    .data-pasien-content .stat-card,
-    .data-poli-content .stat-card,
-    .data-jadwal-content .stat-card,
-    .data-pendaftaran-content .stat-card,
-    .data-laporan-content .stat-card,
-    .dokter-stat-card,
-    .pasien-jadwal-stat-card,
-    .pasien-pendaftaran-stat-card,
-    .pasien-riwayat-stat-card {
-        min-height: 92px !important;
-        grid-template-columns: 62px minmax(0, 1fr) !important;
-        padding: 10px 12px !important;
-        border-width: 3px !important;
-        box-shadow: 5px 5px 0 var(--black) !important;
-    }
-
-    .stat-icon,
-    .dashboard-content .stat-icon,
-    .data-dokter-content .stat-icon,
-    .data-pasien-content .stat-icon,
-    .data-poli-content .stat-icon,
-    .data-jadwal-content .stat-icon,
-    .data-pendaftaran-content .stat-icon,
-    .data-laporan-content .stat-icon,
-    .dokter-stat-icon,
-    .pasien-jadwal-stat-icon,
-    .pasien-pendaftaran-stat-icon,
-    .pasien-riwayat-stat-icon {
-        width: 50px !important;
-        height: 58px !important;
-        border-width: 3px !important;
-        box-shadow: 4px 4px 0 var(--black) !important;
-    }
-
-    .stat-icon svg,
-    .dashboard-content .stat-icon svg,
-    .data-dokter-content .stat-icon svg,
-    .data-pasien-content .stat-icon svg,
-    .data-poli-content .stat-icon svg,
-    .data-jadwal-content .stat-icon svg,
-    .data-pendaftaran-content .stat-icon svg,
-    .data-laporan-content .stat-icon svg,
-    .dokter-stat-icon svg,
-    .pasien-jadwal-stat-icon svg,
-    .pasien-pendaftaran-stat-icon svg,
-    .pasien-riwayat-stat-icon svg {
-        width: 28px !important;
-        height: 28px !important;
-    }
-
-    .stat-label,
-    .dashboard-content .stat-label,
-    .data-dokter-content .stat-label,
-    .data-pasien-content .stat-label,
-    .data-poli-content .stat-label,
-    .data-jadwal-content .stat-label,
-    .data-pendaftaran-content .stat-label,
-    .data-laporan-content .stat-label,
-    .dokter-stat-label,
-    .pasien-jadwal-stat-label,
-    .pasien-pendaftaran-stat-label,
-    .pasien-riwayat-stat-label {
-        font-size: 14px !important;
-    }
-
-    .stat-number,
-    .dashboard-content .stat-number,
-    .data-dokter-content .stat-number,
-    .data-pasien-content .stat-number,
-    .data-poli-content .stat-number,
-    .data-jadwal-content .stat-number,
-    .data-pendaftaran-content .stat-number,
-    .data-laporan-content .stat-number,
-    .dokter-stat-number,
-    .pasien-jadwal-stat-number,
-    .pasien-pendaftaran-stat-number,
-    .pasien-riwayat-stat-number {
-        font-size: 31px !important;
-    }
-
-    .panel,
-    .dashboard-content .panel,
-    .data-dokter-content .panel,
-    .data-pasien-content .panel,
-    .data-poli-content .panel,
-    .data-jadwal-content .jadwal-panel,
-    .data-pendaftaran-content .pendaftaran-panel,
-    .data-laporan-content .laporan-panel,
-    .dokter-panel,
-    .pasien-jadwal-panel,
-    .pasien-pendaftaran-panel,
-    .pasien-riwayat-panel {
-        padding: 12px !important;
-        border-width: 3px !important;
-        box-shadow: 5px 5px 0 var(--black) !important;
-    }
-
-    .panel-title,
-    .dashboard-content .panel-title,
-    .data-dokter-content .panel-title,
-    .data-pasien-content .panel-title,
-    .data-poli-content .panel-title,
-    .data-jadwal-content .panel-title,
-    .data-pendaftaran-content .panel-title,
-    .data-laporan-content .panel-title,
-    .dokter-panel-title,
-    .pasien-jadwal-panel-title,
-    .pasien-pendaftaran-panel-title,
-    .pasien-riwayat-panel-title {
-        font-size: 16px !important;
-        border-width: 3px !important;
-        box-shadow: 4px 4px 0 var(--black) !important;
-    }
-
-    .table-wrap table,
-    .table-box table,
-    .poli-table,
-    .jadwal-table,
-    .pendaftaran-table,
-    .laporan-table,
+    .dashboard-content table,
+    .data-pasien-content table,
+    .data-dokter-content table,
+    .data-poli-content table,
+    .data-jadwal-content table,
+    .data-pendaftaran-content table,
+    .data-laporan-content table,
     .dokter-table,
     .pasien-jadwal-table,
     .pasien-pendaftaran-table,
     .pasien-riwayat-table {
-        width: 680px !important;
-        min-width: 680px !important;
-    }
-
-    th,
-    td,
-    .dashboard-content th,
-    .dashboard-content td,
-    .data-pasien-content th,
-    .data-pasien-content td,
-    .data-dokter-content th,
-    .data-dokter-content td,
-    .data-poli-content th,
-    .data-poli-content td,
-    .data-jadwal-content th,
-    .data-jadwal-content td,
-    .data-pendaftaran-content th,
-    .data-pendaftaran-content td,
-    .data-laporan-content th,
-    .data-laporan-content td,
-    .dokter-table th,
-    .dokter-table td,
-    .pasien-jadwal-table th,
-    .pasien-jadwal-table td,
-    .pasien-pendaftaran-table th,
-    .pasien-pendaftaran-table td,
-    .pasien-riwayat-table th,
-    .pasien-riwayat-table td {
-        font-size: 12.5px !important;
-        height: 50px !important;
-    }
-
-    .quick-action,
-    .pasien-dashboard-content .quick-action {
-        grid-template-columns: 58px minmax(0, 1fr) 42px !important;
-    }
-}
-
-/* =========================================================
-   SUPER SMALL
-========================================================= */
-@media (max-width: 380px) {
-    .header-title h1 {
-        font-size: 19px !important;
-    }
-
-    .header-title p {
-        font-size: 12px !important;
-    }
-
-    .table-wrap table,
-    .table-box table,
-    .poli-table,
-    .jadwal-table,
-    .pendaftaran-table,
-    .laporan-table,
-    .dokter-table,
-    .pasien-jadwal-table,
-    .pasien-pendaftaran-table,
-    .pasien-riwayat-table {
-        width: 640px !important;
-        min-width: 640px !important;
-    }
-}
-
-/* =========================================================
-   PRINT / PRESENTATION SAFETY
-========================================================= */
-@media print {
-    html,
-    body,
-    .admin-page,
-    .admin-content {
-        overflow: visible !important;
-        height: auto !important;
+        width: 700px;
+        min-width: 700px;
     }
 }
