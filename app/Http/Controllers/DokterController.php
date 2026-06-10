@@ -112,6 +112,42 @@ class DokterController extends Controller
         ));
     }
 
+    public function searchJadwalAjax(Request $request)
+    {
+        if ($redirect = $this->checkDokter()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Akses ditolak.'
+            ], 403);
+        }
+
+        $dokter = $this->getDokterLogin();
+
+        $search = $request->search;
+
+        $jadwals = Jadwal::with(['dokter.user', 'poli'])
+            ->where('dokter_id', $dokter->id)
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('hari', 'like', '%' . $search . '%')
+                        ->orWhere('jam_mulai', 'like', '%' . $search . '%')
+                        ->orWhere('jam_selesai', 'like', '%' . $search . '%')
+                        ->orWhereHas('poli', function ($poliQuery) use ($search) {
+                            $poliQuery->where('nama_poli', 'like', '%' . $search . '%');
+                        });
+                });
+            })
+            ->latest()
+            ->get();
+
+        $html = view('dokter.partials.jadwal-table', compact('jadwals'))->render();
+
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
+        ]);
+    }
+
     public function pemeriksaan(Request $request)
     {
         if ($redirect = $this->checkDokter()) {
@@ -171,6 +207,52 @@ class DokterController extends Controller
             'totalSelesai',
             'search'
         ));
+    }
+
+    public function searchPemeriksaanAjax(Request $request)
+    {
+        if ($redirect = $this->checkDokter()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Akses ditolak.'
+            ], 403);
+        }
+
+        $dokter = $this->getDokterLogin();
+        $search = $request->search;
+
+        $pendaftarans = Pendaftaran::with([
+                'pasien.user',
+                'jadwal.dokter.user',
+                'jadwal.poli',
+                'pemeriksaan',
+            ])
+            ->whereHas('jadwal', function ($query) use ($dokter) {
+                $query->where('dokter_id', $dokter->id);
+            })
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery->where('status', 'like', '%' . $search . '%')
+                        ->orWhere('tanggal_daftar', 'like', '%' . $search . '%')
+                        ->orWhere('nomor_antrean', 'like', '%' . $search . '%')
+                        ->orWhereHas('pasien.user', function ($userQuery) use ($search) {
+                            $userQuery->where('name', 'like', '%' . $search . '%')
+                                ->orWhere('email', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('jadwal.poli', function ($poliQuery) use ($search) {
+                            $poliQuery->where('nama_poli', 'like', '%' . $search . '%');
+                        });
+                });
+            })
+            ->latest()
+            ->get();
+
+        $html = view('dokter.partials.pemeriksaan-table', compact('pendaftarans'))->render();
+
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
+        ]);
     }
 
     public function createPemeriksaan($pendaftaranId)
@@ -342,6 +424,51 @@ class DokterController extends Controller
             'pemeriksaanHariIni',
             'search'
         ));
+    }
+
+    public function searchLaporanAjax(Request $request)
+    {
+        if ($redirect = $this->checkDokter()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Akses ditolak.'
+            ], 403);
+        }
+
+        $dokter = $this->getDokterLogin();
+        $search = $request->search;
+
+        $pemeriksaans = Pemeriksaan::with([
+                'pendaftaran.pasien.user',
+                'pendaftaran.jadwal.dokter.user',
+                'pendaftaran.jadwal.poli',
+            ])
+            ->whereHas('pendaftaran.jadwal', function ($query) use ($dokter) {
+                $query->where('dokter_id', $dokter->id);
+            })
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery->where('keluhan', 'like', '%' . $search . '%')
+                        ->orWhere('diagnosa', 'like', '%' . $search . '%')
+                        ->orWhere('resep', 'like', '%' . $search . '%')
+                        ->orWhereHas('pendaftaran.pasien.user', function ($userQuery) use ($search) {
+                            $userQuery->where('name', 'like', '%' . $search . '%')
+                                ->orWhere('email', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('pendaftaran.jadwal.poli', function ($poliQuery) use ($search) {
+                            $poliQuery->where('nama_poli', 'like', '%' . $search . '%');
+                        });
+                });
+            })
+            ->latest()
+            ->get();
+
+        $html = view('dokter.partials.laporan-table', compact('pemeriksaans'))->render();
+
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
+        ]);
     }
 
     public function profile()

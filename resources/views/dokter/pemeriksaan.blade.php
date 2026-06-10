@@ -20,7 +20,7 @@
         </div>
     @endif
 
-    <form action="{{ route('dokter.pemeriksaan.index') }}" method="GET" class="dokter-toolbar">
+    <div class="dokter-toolbar">
         <div class="dokter-search-box">
             <svg viewBox="0 0 64 64">
                 <circle cx="27" cy="27" r="16"></circle>
@@ -29,16 +29,16 @@
 
             <input
                 type="text"
-                name="search"
+                id="searchPemeriksaanDokter"
                 value="{{ $search ?? '' }}"
                 placeholder="Cari pasien, poli, status..."
             >
         </div>
 
-        <button type="submit" class="dokter-search-btn">
+        <button type="button" class="dokter-search-btn" id="btnSearchPemeriksaanDokter">
             Cari
         </button>
-    </form>
+    </div>
 
     <div class="dokter-panel">
         <div class="dokter-panel-title">Daftar Pasien Pemeriksaan</div>
@@ -56,43 +56,80 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    @forelse($pendaftarans ?? [] as $pendaftaran)
-                        <tr>
-                            <td>{{ $pendaftaran->pasien->user->name ?? '-' }}</td>
-                            <td>{{ $pendaftaran->jadwal->poli->nama_poli ?? '-' }}</td>
-                            <td>{{ $pendaftaran->tanggal_daftar ?? '-' }}</td>
-                            <td>{{ $pendaftaran->nomor_antrean ?? $pendaftaran->nomor_antrian ?? '-' }}</td>
-                            <td>
-                                <span class="dokter-status {{ $pendaftaran->status ?? 'menunggu' }}">
-                                    {{ ucfirst($pendaftaran->status ?? '-') }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="dokter-action-cell">
-                                    @if($pendaftaran->pemeriksaan)
-                                        <a href="{{ route('dokter.pemeriksaan.edit', $pendaftaran->pemeriksaan->id) }}" class="dokter-action-btn yellow">
-                                            Edit
-                                        </a>
-                                    @else
-                                        <a href="{{ route('dokter.pemeriksaan.create', $pendaftaran->id) }}" class="dokter-action-btn green">
-                                            Periksa
-                                        </a>
-                                    @endif
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="dokter-empty">
-                                Belum ada pasien untuk diperiksa
-                            </td>
-                        </tr>
-                    @endforelse
+                <tbody id="pemeriksaanDokterTableBody">
+                    @include('dokter.partials.pemeriksaan-table', ['pendaftarans' => $pendaftarans])
                 </tbody>
             </table>
         </div>
     </div>
 
 </div>
+@endsection
+
+@section('extra-js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchPemeriksaanDokter');
+        const searchButton = document.getElementById('btnSearchPemeriksaanDokter');
+        const tableBody = document.getElementById('pemeriksaanDokterTableBody');
+
+        let searchTimer = null;
+
+        function searchPemeriksaanDokter() {
+            const keyword = searchInput.value;
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="dokter-empty">
+                        Memuat data pemeriksaan...
+                    </td>
+                </tr>
+            `;
+
+            fetch(`{{ route('dokter.pemeriksaan.ajax.search') }}?search=${encodeURIComponent(keyword)}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                if (data.status === 'success') {
+                    tableBody.innerHTML = data.html;
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="dokter-empty">
+                                ${data.message ?? 'Gagal memuat data pemeriksaan'}
+                            </td>
+                        </tr>
+                    `;
+                }
+            })
+            .catch(function () {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="dokter-empty">
+                            Terjadi kesalahan saat mencari data
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        if (searchButton) {
+            searchButton.addEventListener('click', searchPemeriksaanDokter);
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function () {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(searchPemeriksaanDokter, 400);
+            });
+        }
+    });
+</script>
 @endsection

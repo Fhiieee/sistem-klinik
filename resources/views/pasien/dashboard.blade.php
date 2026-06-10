@@ -1,25 +1,12 @@
 @extends('layouts.app')
-
 @section('layout-type', 'pasien')
-@section('active-menu', 'dashboard')
 
 @section('page-title', 'Dashboard Pasien')
 @section('page-subtitle', 'Selamat datang, Pasien Klinik Sehati')
+@section('active-menu', 'dashboard')
 
 @section('content')
 <div class="pasien-dashboard-content">
-
-    @if(session('success'))
-        <div class="alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert-error">
-            {{ session('error') }}
-        </div>
-    @endif
 
     <div class="stat-row">
         <div class="stat-card">
@@ -31,7 +18,7 @@
                 </svg>
             </div>
 
-            <div class="stat-info">
+            <div>
                 <div class="stat-label">Total Pendaftaran</div>
                 <div class="stat-number text-green">{{ $totalPendaftaran ?? 0 }}</div>
             </div>
@@ -47,7 +34,7 @@
                 </svg>
             </div>
 
-            <div class="stat-info">
+            <div>
                 <div class="stat-label">Pendaftaran Menunggu</div>
                 <div class="stat-number text-yellow">{{ $pendaftaranMenunggu ?? 0 }}</div>
             </div>
@@ -64,7 +51,7 @@
                 </svg>
             </div>
 
-            <div class="stat-info">
+            <div>
                 <div class="stat-label">Pemeriksaan Selesai</div>
                 <div class="stat-number text-blue">{{ $pemeriksaanSelesai ?? 0 }}</div>
             </div>
@@ -73,12 +60,13 @@
         </div>
     </div>
 
-    <div class="pasien-dashboard-grid">
-        <div class="pasien-panel">
+    <div class="dashboard-grid">
+
+        <div class="panel">
             <div class="panel-title">Pendaftaran Terbaru</div>
 
-            <div class="pasien-table-wrap">
-                <table class="pasien-table">
+            <div class="table-wrap">
+                <table>
                     <thead>
                         <tr>
                             <th>Dokter</th>
@@ -91,7 +79,7 @@
                     </thead>
 
                     <tbody>
-                        @forelse($pendaftaranTerbaru as $pendaftaran)
+                        @forelse($pendaftaranTerbaru ?? [] as $pendaftaran)
                             <tr>
                                 <td>{{ $pendaftaran->jadwal->dokter->user->name ?? '-' }}</td>
                                 <td>{{ $pendaftaran->jadwal->poli->nama_poli ?? '-' }}</td>
@@ -116,11 +104,11 @@
             </div>
         </div>
 
-        <div class="pasien-panel quick-panel">
+        <div class="panel quick-panel">
             <div class="panel-title">Menu Cepat</div>
 
             <div class="quick-list">
-                <a href="{{ route('pasien.jadwal.index') }}" class="quick-action green">
+                <a href="{{ route('pasien.jadwal.index') }}" class="quick-action">
                     <div class="quick-icon">
                         <svg viewBox="0 0 64 64">
                             <rect x="10" y="14" width="44" height="42" rx="3"></rect>
@@ -132,7 +120,8 @@
 
                     <div class="quick-arrow">
                         <svg viewBox="0 0 64 64">
-                            <path d="M24 14l18 18-18 18"></path>
+                            <path d="M22 32h20"></path>
+                            <path d="M34 22l10 10-10 10"></path>
                         </svg>
                     </div>
                 </a>
@@ -149,7 +138,8 @@
 
                     <div class="quick-arrow">
                         <svg viewBox="0 0 64 64">
-                            <path d="M24 14l18 18-18 18"></path>
+                            <path d="M22 32h20"></path>
+                            <path d="M34 22l10 10-10 10"></path>
                         </svg>
                     </div>
                 </a>
@@ -167,7 +157,8 @@
 
                     <div class="quick-arrow">
                         <svg viewBox="0 0 64 64">
-                            <path d="M24 14l18 18-18 18"></path>
+                            <path d="M22 32h20"></path>
+                            <path d="M34 22l10 10-10 10"></path>
                         </svg>
                     </div>
                 </a>
@@ -186,12 +177,14 @@
 
                     <div class="quick-arrow">
                         <svg viewBox="0 0 64 64">
-                            <path d="M24 14l18 18-18 18"></path>
+                            <path d="M22 32h20"></path>
+                            <path d="M34 22l10 10-10 10"></path>
                         </svg>
                     </div>
                 </a>
             </div>
         </div>
+
     </div>
 
 </div>

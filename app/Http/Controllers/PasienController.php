@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pasien;
+use App\Models\Jadwal;
+use App\Models\Dokter;
+use App\Models\Poli;
 use App\Models\Pendaftaran;
 use App\Models\Pemeriksaan;
 use Illuminate\Http\Request;
@@ -111,6 +114,40 @@ class PasienController extends Controller
         ));
     }
 
+    public function searchJadwalAjax(Request $request)
+    {
+        if ($redirect = $this->checkPasien()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Akses ditolak.'
+            ], 403);
+        }
+
+        $search = $request->search;
+
+        $jadwals = Jadwal::with(['dokter.user', 'poli'])
+            ->when($search, function ($query) use ($search) {
+                $query->where('hari', 'like', '%' . $search . '%')
+                    ->orWhere('jam_mulai', 'like', '%' . $search . '%')
+                    ->orWhere('jam_selesai', 'like', '%' . $search . '%')
+                    ->orWhereHas('dokter.user', function ($dokterQuery) use ($search) {
+                        $dokterQuery->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('poli', function ($poliQuery) use ($search) {
+                        $poliQuery->where('nama_poli', 'like', '%' . $search . '%');
+                    });
+            })
+            ->latest()
+            ->get();
+
+        $html = view('pasien.partials.jadwal-table', compact('jadwals'))->render();
+
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
+        ]);
+    }
+
     public function pendaftaran(Request $request)
     {
         if ($redirect = $this->checkPasien()) {
@@ -164,6 +201,58 @@ class PasienController extends Controller
             'pendaftaranSelesai',
             'search'
         ));
+    }
+
+    public function searchPendaftaranAjax(Request $request)
+    {
+        if ($redirect = $this->checkPasien()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Akses ditolak.'
+            ], 403);
+        }
+
+        $pasien = $this->getPasien();
+
+        if (!$pasien) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data pasien tidak ditemukan.'
+            ], 404);
+        }
+
+        $search = $request->search;
+
+        $pendaftarans = Pendaftaran::with([
+                'jadwal.dokter.user',
+                'jadwal.poli',
+            ])
+            ->where('pasien_id', $pasien->id)
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('tanggal_daftar', 'like', '%' . $search . '%')
+                        ->orWhere('nomor_antrean', 'like', '%' . $search . '%')
+                        ->orWhere('status', 'like', '%' . $search . '%')
+                        ->orWhereHas('jadwal.dokter.user', function ($dokterQuery) use ($search) {
+                            $dokterQuery->where('name', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('jadwal.poli', function ($poliQuery) use ($search) {
+                            $poliQuery->where('nama_poli', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('jadwal', function ($jadwalQuery) use ($search) {
+                            $jadwalQuery->where('hari', 'like', '%' . $search . '%');
+                        });
+                });
+            })
+            ->latest()
+            ->get();
+
+        $html = view('pasien.partials.pendaftaran-table', compact('pendaftarans'))->render();
+
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
+        ]);
     }
 
     public function createPendaftaran(Request $request)
@@ -222,28 +311,15 @@ class PasienController extends Controller
             ->whereDate('tanggal_daftar', $request->tanggal_daftar)
             ->max('nomor_antrean');
 
-        if ($nomorAntreanTerakhir === null) {
-            $nomorAntreanTerakhir = \App\Models\Pendaftaran::where('jadwal_id', $request->jadwal_id)
-                ->whereDate('tanggal_daftar', $request->tanggal_daftar)
-                ->max('nomor_antrian');
-        }
-
         $nomorAntreanBaru = ((int) $nomorAntreanTerakhir) + 1;
 
-        $data = [
+        \App\Models\Pendaftaran::create([
             'pasien_id' => $pasien->id,
             'jadwal_id' => $request->jadwal_id,
             'tanggal_daftar' => $request->tanggal_daftar,
+            'nomor_antrean' => $nomorAntreanBaru,
             'status' => 'menunggu',
-        ];
-
-        if (\Illuminate\Support\Facades\Schema::hasColumn('pendaftarans', 'nomor_antrean')) {
-            $data['nomor_antrean'] = $nomorAntreanBaru;
-        } else {
-            $data['nomor_antrian'] = $nomorAntreanBaru;
-        }
-
-        \App\Models\Pendaftaran::create($data);
+        ]);
 
         return redirect()
             ->route('pasien.pendaftaran.index')
@@ -307,6 +383,58 @@ class PasienController extends Controller
             'totalPendaftaran',
             'search'
         ));
+    }
+
+    public function searchRiwayatAjax(Request $request)
+    {
+        if ($redirect = $this->checkPasien()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Akses ditolak.'
+            ], 403);
+        }
+
+        $pasien = $this->getPasien();
+
+        if (!$pasien) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data pasien tidak ditemukan.'
+            ], 404);
+        }
+
+        $search = $request->search;
+
+        $pemeriksaans = Pemeriksaan::with([
+                'pendaftaran.jadwal.dokter.user',
+                'pendaftaran.jadwal.poli',
+            ])
+            ->whereHas('pendaftaran', function ($query) use ($pasien) {
+                $query->where('pasien_id', $pasien->id);
+            })
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('keluhan', 'like', '%' . $search . '%')
+                        ->orWhere('diagnosa', 'like', '%' . $search . '%')
+                        ->orWhere('resep', 'like', '%' . $search . '%')
+                        ->orWhereDate('created_at', $search)
+                        ->orWhereHas('pendaftaran.jadwal.dokter.user', function ($dokterQuery) use ($search) {
+                            $dokterQuery->where('name', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('pendaftaran.jadwal.poli', function ($poliQuery) use ($search) {
+                            $poliQuery->where('nama_poli', 'like', '%' . $search . '%');
+                        });
+                });
+            })
+            ->latest()
+            ->get();
+
+        $html = view('pasien.partials.riwayat-table', compact('pemeriksaans'))->render();
+
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
+        ]);
     }
 
     public function profile()

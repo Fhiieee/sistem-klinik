@@ -159,11 +159,12 @@
                     </table>
                 </div>
 
-                <a href="#" class="show-all">
-                    Lihat Semua Data
+                <a href="{{ route('admin.pendaftaran.index') }}" class="show-all">
+                    <span>Lihat Semua Data</span>
+
                     <svg viewBox="0 0 64 64">
-                        <path d="M12 32h36"></path>
-                        <path d="M38 20l12 12-12 12"></path>
+                        <path d="M14 32h34"></path>
+                        <path d="M36 20l12 12-12 12"></path>
                     </svg>
                 </a>
             </div>

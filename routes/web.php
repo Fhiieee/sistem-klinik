@@ -158,13 +158,19 @@ Route::get('/dokter/profile', [DokterController::class, 'profile'])->name('dokte
 Route::put('/dokter/profile', [DokterController::class, 'updateProfile'])->name('dokter.profile.update');
 
 Route::get('/dokter/jadwal', [DokterController::class, 'jadwal'])->name('dokter.jadwal.index');
+Route::get('/dokter/jadwal/ajax/search', [DokterController::class, 'searchJadwalAjax'])
+    ->name('dokter.jadwal.ajax.search');
 
 Route::get('/dokter/pemeriksaan', [DokterController::class, 'pemeriksaan'])->name('dokter.pemeriksaan.index');
+Route::get('/dokter/pemeriksaan/ajax/search', [DokterController::class, 'searchPemeriksaanAjax'])
+    ->name('dokter.pemeriksaan.ajax.search');
 Route::get('/dokter/pemeriksaan/{pendaftaranId}/create', [DokterController::class, 'createPemeriksaan'])->name('dokter.pemeriksaan.create');
 Route::post('/dokter/pemeriksaan/{pendaftaranId}', [DokterController::class, 'storePemeriksaan'])->name('dokter.pemeriksaan.store');
 Route::get('/dokter/pemeriksaan/detail/{pemeriksaanId}', [DokterController::class, 'detailPemeriksaan'])->name('dokter.pemeriksaan.detail');
 
 Route::get('/dokter/laporan', [DokterController::class, 'laporan'])->name('dokter.laporan.index');
+Route::get('/dokter/laporan/ajax/search', [DokterController::class, 'searchLaporanAjax'])
+    ->name('dokter.laporan.ajax.search');
 
 /*
 |--------------------------------------------------------------------------
@@ -175,12 +181,18 @@ Route::get('/dokter/laporan', [DokterController::class, 'laporan'])->name('dokte
 Route::get('/pasien/dashboard', [PasienController::class, 'dashboard'])->name('pasien.dashboard');
 
 Route::get('/pasien/jadwal', [PasienController::class, 'jadwal'])->name('pasien.jadwal.index');
+Route::get('/pasien/jadwal/ajax/search', [PasienController::class, 'searchJadwalAjax'])
+    ->name('pasien.jadwal.ajax.search');
 
 Route::get('/pasien/pendaftaran', [PasienController::class, 'pendaftaran'])->name('pasien.pendaftaran.index');
+Route::get('/pasien/pendaftaran/ajax/search', [PasienController::class, 'searchPendaftaranAjax'])
+    ->name('pasien.pendaftaran.ajax.search');
 Route::get('/pasien/pendaftaran/tambah', [PasienController::class, 'createPendaftaran'])->name('pasien.pendaftaran.create');
 Route::post('/pasien/pendaftaran', [PasienController::class, 'storePendaftaran'])->name('pasien.pendaftaran.store');
 
 Route::get('/pasien/riwayat', [PasienController::class, 'riwayat'])->name('pasien.riwayat.index');
+Route::get('/pasien/riwayat/ajax/search', [PasienController::class, 'searchRiwayatAjax'])
+    ->name('pasien.riwayat.ajax.search');
 
 Route::get('/pasien/profile', [PasienController::class, 'profile'])->name('pasien.profile');
 Route::put('/pasien/profile', [PasienController::class, 'updateProfile'])->name('pasien.profile.update');

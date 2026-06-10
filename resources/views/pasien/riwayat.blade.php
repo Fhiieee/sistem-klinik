@@ -9,7 +9,7 @@
 @section('content')
 <div class="pasien-riwayat-content">
 
-    <form action="{{ route('pasien.riwayat.index') }}" method="GET" class="pasien-riwayat-toolbar">
+    <div class="pasien-riwayat-toolbar">
         <div class="pasien-riwayat-search">
             <svg viewBox="0 0 64 64">
                 <circle cx="27" cy="27" r="16"></circle>
@@ -18,16 +18,16 @@
 
             <input
                 type="text"
-                name="search"
+                id="searchRiwayatPasien"
                 value="{{ $search ?? '' }}"
                 placeholder="Cari dokter, poli, diagnosa, resep..."
             >
         </div>
 
-        <button type="submit" class="pasien-riwayat-search-btn">
+        <button type="button" class="pasien-riwayat-search-btn" id="btnSearchRiwayatPasien">
             Cari
         </button>
-    </form>
+    </div>
 
     <div class="pasien-riwayat-stat-row">
         <div class="pasien-riwayat-stat-card">
@@ -42,7 +42,9 @@
 
             <div>
                 <div class="pasien-riwayat-stat-label">Total Pemeriksaan</div>
-                <div class="pasien-riwayat-stat-number text-green">{{ $totalPemeriksaan ?? 0 }}</div>
+                <div class="pasien-riwayat-stat-number text-green">
+                    {{ $totalPemeriksaan ?? 0 }}
+                </div>
             </div>
 
             <div class="pasien-riwayat-card-dots">...</div>
@@ -59,7 +61,9 @@
 
             <div>
                 <div class="pasien-riwayat-stat-label">Hari Ini</div>
-                <div class="pasien-riwayat-stat-number text-blue">{{ $pemeriksaanHariIni ?? 0 }}</div>
+                <div class="pasien-riwayat-stat-number text-blue">
+                    {{ $pemeriksaanHariIni ?? 0 }}
+                </div>
             </div>
 
             <div class="pasien-riwayat-card-dots">...</div>
@@ -76,7 +80,9 @@
 
             <div>
                 <div class="pasien-riwayat-stat-label">Total Pendaftaran</div>
-                <div class="pasien-riwayat-stat-number text-yellow">{{ $totalPendaftaran ?? 0 }}</div>
+                <div class="pasien-riwayat-stat-number text-yellow">
+                    {{ $totalPendaftaran ?? 0 }}
+                </div>
             </div>
 
             <div class="pasien-riwayat-card-dots">...</div>
@@ -101,27 +107,79 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    @forelse($pemeriksaans ?? [] as $pemeriksaan)
-                        <tr>
-                            <td>{{ $pemeriksaan->pendaftaran->jadwal->dokter->user->name ?? '-' }}</td>
-                            <td>{{ $pemeriksaan->pendaftaran->jadwal->poli->nama_poli ?? '-' }}</td>
-                            <td>{{ $pemeriksaan->keluhan ?? '-' }}</td>
-                            <td>{{ $pemeriksaan->diagnosa ?? '-' }}</td>
-                            <td>{{ $pemeriksaan->resep ?? '-' }}</td>
-                            <td>{{ $pemeriksaan->created_at ? $pemeriksaan->created_at->format('d-m-Y') : '-' }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="pasien-riwayat-empty">
-                                Belum ada riwayat pemeriksaan
-                            </td>
-                        </tr>
-                    @endforelse
+                <tbody id="riwayatPasienTableBody">
+                    @include('pasien.partials.riwayat-table', ['pemeriksaans' => $pemeriksaans])
                 </tbody>
             </table>
         </div>
     </div>
 
 </div>
+@endsection
+
+@section('extra-js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchRiwayatPasien');
+        const searchButton = document.getElementById('btnSearchRiwayatPasien');
+        const tableBody = document.getElementById('riwayatPasienTableBody');
+
+        let searchTimer = null;
+
+        function searchRiwayatPasien() {
+            const keyword = searchInput.value;
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="pasien-riwayat-empty">
+                        Memuat data riwayat pemeriksaan...
+                    </td>
+                </tr>
+            `;
+
+            fetch(`{{ route('pasien.riwayat.ajax.search') }}?search=${encodeURIComponent(keyword)}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                if (data.status === 'success') {
+                    tableBody.innerHTML = data.html;
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="pasien-riwayat-empty">
+                                Gagal memuat data riwayat pemeriksaan
+                            </td>
+                        </tr>
+                    `;
+                }
+            })
+            .catch(function () {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="pasien-riwayat-empty">
+                            Terjadi kesalahan saat mencari data
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        if (searchButton) {
+            searchButton.addEventListener('click', searchRiwayatPasien);
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function () {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(searchRiwayatPasien, 400);
+            });
+        }
+    });
+</script>
 @endsection

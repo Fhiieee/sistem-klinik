@@ -21,7 +21,7 @@
         </div>
     @endif
 
-    <form action="{{ route('pasien.pendaftaran.index') }}" method="GET" class="pasien-pendaftaran-toolbar">
+    <div class="pasien-pendaftaran-toolbar">
         <div class="pasien-pendaftaran-search">
             <svg viewBox="0 0 64 64">
                 <circle cx="27" cy="27" r="16"></circle>
@@ -30,13 +30,13 @@
 
             <input
                 type="text"
-                name="search"
+                id="searchPendaftaranPasien"
                 value="{{ $search ?? '' }}"
                 placeholder="Cari pendaftaran, dokter, poli, status..."
             >
         </div>
 
-        <button type="submit" class="pasien-pendaftaran-search-btn">
+        <button type="button" class="pasien-pendaftaran-search-btn" id="btnSearchPendaftaranPasien">
             Cari
         </button>
 
@@ -47,7 +47,7 @@
             </svg>
             Daftar Baru
         </a>
-    </form>
+    </div>
 
     <div class="pasien-pendaftaran-stat-row">
         <div class="pasien-pendaftaran-stat-card">
@@ -61,7 +61,9 @@
 
             <div>
                 <div class="pasien-pendaftaran-stat-label">Total Pendaftaran</div>
-                <div class="pasien-pendaftaran-stat-number text-green">{{ $totalPendaftaran ?? 0 }}</div>
+                <div class="pasien-pendaftaran-stat-number text-green">
+                    {{ $totalPendaftaran ?? 0 }}
+                </div>
             </div>
 
             <div class="pasien-pendaftaran-card-dots">...</div>
@@ -77,7 +79,9 @@
 
             <div>
                 <div class="pasien-pendaftaran-stat-label">Menunggu</div>
-                <div class="pasien-pendaftaran-stat-number text-yellow">{{ $pendaftaranMenunggu ?? 0 }}</div>
+                <div class="pasien-pendaftaran-stat-number text-yellow">
+                    {{ $pendaftaranMenunggu ?? 0 }}
+                </div>
             </div>
 
             <div class="pasien-pendaftaran-card-dots">...</div>
@@ -94,7 +98,9 @@
 
             <div>
                 <div class="pasien-pendaftaran-stat-label">Selesai</div>
-                <div class="pasien-pendaftaran-stat-number text-blue">{{ $pendaftaranSelesai ?? 0 }}</div>
+                <div class="pasien-pendaftaran-stat-number text-blue">
+                    {{ $pendaftaranSelesai ?? 0 }}
+                </div>
             </div>
 
             <div class="pasien-pendaftaran-card-dots">...</div>
@@ -119,31 +125,79 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    @forelse($pendaftarans ?? [] as $pendaftaran)
-                        <tr>
-                            <td>{{ $pendaftaran->jadwal->dokter->user->name ?? '-' }}</td>
-                            <td>{{ $pendaftaran->jadwal->poli->nama_poli ?? '-' }}</td>
-                            <td>{{ $pendaftaran->jadwal->hari ?? '-' }}</td>
-                            <td>{{ $pendaftaran->tanggal_daftar ?? '-' }}</td>
-                            <td>{{ $pendaftaran->nomor_antrian ?? $pendaftaran->nomor_antrean ?? '-' }}</td>
-                            <td>
-                                <span class="pasien-pendaftaran-status {{ $pendaftaran->status ?? 'menunggu' }}">
-                                    {{ ucfirst($pendaftaran->status ?? 'menunggu') }}
-                                </span>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="pasien-pendaftaran-empty">
-                                Belum ada data pendaftaran
-                            </td>
-                        </tr>
-                    @endforelse
+                <tbody id="pendaftaranPasienTableBody">
+                    @include('pasien.partials.pendaftaran-table', ['pendaftarans' => $pendaftarans])
                 </tbody>
             </table>
         </div>
     </div>
 
 </div>
+@endsection
+
+@section('extra-js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchPendaftaranPasien');
+        const searchButton = document.getElementById('btnSearchPendaftaranPasien');
+        const tableBody = document.getElementById('pendaftaranPasienTableBody');
+
+        let searchTimer = null;
+
+        function searchPendaftaranPasien() {
+            const keyword = searchInput.value;
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="pasien-pendaftaran-empty">
+                        Memuat data pendaftaran...
+                    </td>
+                </tr>
+            `;
+
+            fetch(`{{ route('pasien.pendaftaran.ajax.search') }}?search=${encodeURIComponent(keyword)}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                if (data.status === 'success') {
+                    tableBody.innerHTML = data.html;
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="pasien-pendaftaran-empty">
+                                Gagal memuat data pendaftaran
+                            </td>
+                        </tr>
+                    `;
+                }
+            })
+            .catch(function () {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="pasien-pendaftaran-empty">
+                            Terjadi kesalahan saat mencari data
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        if (searchButton) {
+            searchButton.addEventListener('click', searchPendaftaranPasien);
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function () {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(searchPendaftaranPasien, 400);
+            });
+        }
+    });
+</script>
 @endsection

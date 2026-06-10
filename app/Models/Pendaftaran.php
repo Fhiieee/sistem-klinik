@@ -10,7 +10,7 @@ class Pendaftaran extends Model
         'pasien_id',
         'jadwal_id',
         'tanggal_daftar',
-        'nomor_antrian',
+        'nomor_antrean',
         'status',
     ];
 

@@ -6,9 +6,21 @@
 @section('active-menu', 'laporan')
 
 @section('content')
-<div class="dokter-laporan-content">
+<div class="dokter-pemeriksaan-content">
 
-    <form action="{{ route('dokter.laporan.index') }}" method="GET" class="dokter-toolbar">
+    @if(session('success'))
+        <div class="dokter-alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="dokter-alert-error">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    <div class="dokter-toolbar">
         <div class="dokter-search-box">
             <svg viewBox="0 0 64 64">
                 <circle cx="27" cy="27" r="16"></circle>
@@ -17,16 +29,16 @@
 
             <input
                 type="text"
-                name="search"
+                id="searchLaporanDokter"
                 value="{{ $search ?? '' }}"
                 placeholder="Cari pasien, diagnosa, resep..."
             >
         </div>
 
-        <button type="submit" class="dokter-search-btn">
+        <button type="button" class="dokter-search-btn" id="btnSearchLaporanDokter">
             Cari
         </button>
-    </form>
+    </div>
 
     <div class="dokter-panel">
         <div class="dokter-panel-title">Riwayat Pemeriksaan</div>
@@ -43,26 +55,80 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    @forelse($pemeriksaans ?? [] as $pemeriksaan)
-                        <tr>
-                            <td>{{ $pemeriksaan->pendaftaran->pasien->user->name ?? '-' }}</td>
-                            <td>{{ $pemeriksaan->pendaftaran->jadwal->poli->nama_poli ?? '-' }}</td>
-                            <td class="text-left">{{ $pemeriksaan->keluhan ?? '-' }}</td>
-                            <td class="text-left">{{ $pemeriksaan->diagnosa ?? '-' }}</td>
-                            <td class="text-left">{{ $pemeriksaan->resep ?? '-' }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="dokter-empty">
-                                Belum ada riwayat pemeriksaan
-                            </td>
-                        </tr>
-                    @endforelse
+                <tbody id="laporanDokterTableBody">
+                    @include('dokter.partials.laporan-table', ['pemeriksaans' => $pemeriksaans])
                 </tbody>
             </table>
         </div>
     </div>
 
 </div>
+@endsection
+
+@section('extra-js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchLaporanDokter');
+        const searchButton = document.getElementById('btnSearchLaporanDokter');
+        const tableBody = document.getElementById('laporanDokterTableBody');
+
+        let searchTimer = null;
+
+        function searchLaporanDokter() {
+            const keyword = searchInput.value;
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="dokter-empty">
+                        Memuat data riwayat pemeriksaan...
+                    </td>
+                </tr>
+            `;
+
+            fetch(`{{ route('dokter.laporan.ajax.search') }}?search=${encodeURIComponent(keyword)}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                if (data.status === 'success') {
+                    tableBody.innerHTML = data.html;
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="dokter-empty">
+                                ${data.message ?? 'Gagal memuat data riwayat pemeriksaan'}
+                            </td>
+                        </tr>
+                    `;
+                }
+            })
+            .catch(function () {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="dokter-empty">
+                            Terjadi kesalahan saat mencari data
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        if (searchButton) {
+            searchButton.addEventListener('click', searchLaporanDokter);
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function () {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(searchLaporanDokter, 400);
+            });
+        }
+    });
+</script>
 @endsection

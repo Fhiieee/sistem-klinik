@@ -1,50 +1,41 @@
 @extends('layouts.app')
+
 @section('layout-type', 'dokter')
+@section('active-menu', 'jadwal')
 
 @section('page-title', 'Jadwal Saya')
 @section('page-subtitle', 'Lihat jadwal praktik dokter')
-@section('active-menu', 'jadwal')
 
 @section('content')
-<div class="dokter-jadwal-content">
+<div class="data-jadwal-content dokter-jadwal-page">
 
-    @if(session('success'))
-        <div class="dokter-alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="dokter-alert-error">
-            {{ session('error') }}
-        </div>
-    @endif
-
-    <form action="{{ route('dokter.jadwal.index') }}" method="GET" class="dokter-toolbar">
-        <div class="dokter-search-box">
+    <div class="toolbar dokter-toolbar">
+        <div class="search-box">
             <svg viewBox="0 0 64 64">
                 <circle cx="27" cy="27" r="16"></circle>
-                <path d="M39 39l14 14"></path>
+                <path d="M39 39l13 13"></path>
             </svg>
 
             <input
                 type="text"
-                name="search"
+                id="searchJadwalDokter"
                 value="{{ $search ?? '' }}"
                 placeholder="Cari hari, poli, atau jam..."
             >
         </div>
 
-        <button type="submit" class="dokter-search-btn">
+        <button type="button" class="search-btn" id="btnSearchJadwalDokter">
             Cari
         </button>
-    </form>
+    </div>
 
-    <div class="dokter-panel">
-        <div class="dokter-panel-title">Daftar Jadwal Saya</div>
+    <div class="jadwal-panel">
+        <div class="panel-title">
+            Daftar Jadwal Saya
+        </div>
 
-        <div class="dokter-table-wrap">
-            <table class="dokter-table">
+        <div class="jadwal-table-wrap">
+            <table class="jadwal-table">
                 <thead>
                     <tr>
                         <th>Hari</th>
@@ -55,26 +46,88 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    @forelse($jadwals ?? [] as $jadwal)
-                        <tr>
-                            <td>{{ $jadwal->hari ?? '-' }}</td>
-                            <td>{{ $jadwal->jam_mulai ?? '-' }}</td>
-                            <td>{{ $jadwal->jam_selesai ?? '-' }}</td>
-                            <td>{{ $jadwal->poli->nama_poli ?? '-' }}</td>
-                            <td>{{ $jadwal->dokter->user->name ?? '-' }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="dokter-empty">
-                                Belum ada jadwal dokter
-                            </td>
-                        </tr>
-                    @endforelse
+                <tbody id="jadwalDokterTableBody">
+                    @include('dokter.partials.jadwal-table', ['jadwals' => $jadwals])
                 </tbody>
             </table>
         </div>
     </div>
 
 </div>
+@endsection
+
+@section('extra-js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchJadwalDokter');
+        const searchButton = document.getElementById('btnSearchJadwalDokter');
+        const tableBody = document.getElementById('jadwalDokterTableBody');
+
+        let searchTimer = null;
+
+        function searchJadwalDokter() {
+            const keyword = searchInput.value;
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        Memuat data jadwal...
+                    </td>
+                </tr>
+            `;
+
+            fetch(`{{ route('dokter.jadwal.ajax.search') }}?search=${encodeURIComponent(keyword)}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(async function (response) {
+                const text = await response.text();
+
+                if (!response.ok) {
+                    throw new Error(text);
+                }
+
+                return JSON.parse(text);
+            })
+            .then(function (data) {
+                if (data.status === 'success') {
+                    tableBody.innerHTML = data.html;
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="empty">
+                                Gagal memuat data jadwal
+                            </td>
+                        </tr>
+                    `;
+                }
+            })
+            .catch(function (error) {
+                console.error('AJAX Error:', error);
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty">
+                            Terjadi kesalahan saat mencari data
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        if (searchButton) {
+            searchButton.addEventListener('click', searchJadwalDokter);
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function () {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(searchJadwalDokter, 400);
+            });
+        }
+    });
+</script>
 @endsection

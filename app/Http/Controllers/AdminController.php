@@ -1203,4 +1203,20 @@ class AdminController extends Controller
             'html' => $html
         ]);
     }
+
+    public function detailLaporanPemeriksaan($id)
+    {
+        if ($redirect = $this->checkAdmin()) {
+            return $redirect;
+        }
+
+        $pemeriksaan = Pemeriksaan::with([
+                'pendaftaran.pasien.user',
+                'pendaftaran.jadwal.dokter.user',
+                'pendaftaran.jadwal.poli',
+            ])
+            ->findOrFail($id);
+
+        return view('admin.detail-laporan-pemeriksaan', compact('pemeriksaan'));
+    }
 }

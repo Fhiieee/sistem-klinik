@@ -16,6 +16,18 @@
         </div>
     @endif
 
+    @if(session('success'))
+        <div class="pendaftaran-form-alert success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="pendaftaran-form-alert error">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="pendaftaran-form-card">
         <div class="pendaftaran-form-title">
             <div class="pendaftaran-form-title-icon">
@@ -44,8 +56,10 @@
                         <label>Pasien</label>
                         <select name="pasien_id">
                             <option value="">Pilih Pasien</option>
+
                             @foreach($pasiens as $pasien)
-                                <option value="{{ $pasien->id }}" {{ old('pasien_id', $pendaftaran->pasien_id) == $pasien->id ? 'selected' : '' }}>
+                                <option value="{{ $pasien->id }}"
+                                    {{ old('pasien_id', $pendaftaran->pasien_id) == $pasien->id ? 'selected' : '' }}>
                                     {{ $pasien->user->name ?? '-' }} - {{ $pasien->nik ?? '-' }}
                                 </option>
                             @endforeach
@@ -60,16 +74,18 @@
                         <label>Jadwal Dokter</label>
                         <select name="jadwal_id">
                             <option value="">Pilih Jadwal</option>
+
                             @foreach($jadwals as $jadwal)
-                                <option value="{{ $jadwal->id }}" {{ old('jadwal_id', $pendaftaran->jadwal_id) == $jadwal->id ? 'selected' : '' }}>
+                                <option value="{{ $jadwal->id }}"
+                                    {{ old('jadwal_id', $pendaftaran->jadwal_id) == $jadwal->id ? 'selected' : '' }}>
                                     {{ $jadwal->dokter->user->name ?? '-' }}
                                     -
                                     {{ $jadwal->poli->nama_poli ?? '-' }}
                                     -
-                                    {{ $jadwal->hari }}
-                                    {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }}
+                                    {{ $jadwal->hari ?? '-' }}
+                                    {{ $jadwal->jam_mulai ? \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') : '-' }}
                                     s/d
-                                    {{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }}
+                                    {{ $jadwal->jam_selesai ? \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') : '-' }}
                                 </option>
                             @endforeach
                         </select>
@@ -84,7 +100,7 @@
                         <input
                             type="date"
                             name="tanggal_daftar"
-                            value="{{ old('tanggal_daftar', \Carbon\Carbon::parse($pendaftaran->tanggal_daftar)->format('Y-m-d')) }}"
+                            value="{{ old('tanggal_daftar', $pendaftaran->tanggal_daftar ? \Carbon\Carbon::parse($pendaftaran->tanggal_daftar)->format('Y-m-d') : '') }}"
                         >
 
                         @error('tanggal_daftar')
@@ -96,11 +112,11 @@
                         <label>Nomor Antrean</label>
                         <input
                             type="number"
-                            name="nomor_antrian"
-                            value="{{ old('nomor_antrian', $pendaftaran->nomor_antrian) }}"
+                            name="nomor_antrean"
+                            value="{{ old('nomor_antrean', $pendaftaran->nomor_antrean) }}"
                         >
 
-                        @error('nomor_antrian')
+                        @error('nomor_antrean')
                             <div class="pendaftaran-form-error">{{ $message }}</div>
                         @enderror
                     </div>
@@ -108,10 +124,15 @@
                     <div class="pendaftaran-form-group">
                         <label>Status</label>
                         <select name="status">
-                            <option value="menunggu" {{ old('status', $pendaftaran->status) == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
-                            <option value="diperiksa" {{ old('status', $pendaftaran->status) == 'diperiksa' ? 'selected' : '' }}>Diperiksa</option>
-                            <option value="selesai" {{ old('status', $pendaftaran->status) == 'selesai' ? 'selected' : '' }}>Selesai</option>
-                            <option value="batal" {{ old('status', $pendaftaran->status) == 'batal' ? 'selected' : '' }}>Batal</option>
+                            <option value="menunggu" {{ old('status', $pendaftaran->status) == 'menunggu' ? 'selected' : '' }}>
+                                Menunggu
+                            </option>
+                            <option value="diperiksa" {{ old('status', $pendaftaran->status) == 'diperiksa' ? 'selected' : '' }}>
+                                Diperiksa
+                            </option>
+                            <option value="selesai" {{ old('status', $pendaftaran->status) == 'selesai' ? 'selected' : '' }}>
+                                Selesai
+                            </option>
                         </select>
 
                         @error('status')

@@ -4024,6 +4024,21 @@ body {
     }
 }
 
+/* FIX KHUSUS DOKTER - JADWAL SAYA */
+.data-jadwal-content.dokter-jadwal-page .toolbar {
+    grid-template-columns: minmax(0, 1fr) 150px;
+}
+
+.data-jadwal-content.dokter-jadwal-page .jadwal-table {
+    min-width: 760px;
+}
+
+@media (max-width: 900px) {
+    .data-jadwal-content.dokter-jadwal-page .toolbar {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* ===================== */
 /* TAMBAH / EDIT JADWAL PAGE */
 /* ===================== */
@@ -4969,109 +4984,184 @@ body {
     fill: none;
 }
 
-/* ===================== */
-/* DETAIL LAPORAN PEMERIKSAAN */
-/* ===================== */
+/* =========================================================
+   ADMIN - DETAIL LAPORAN PEMERIKSAAN
+========================================================= */
 
-.detail-laporan-content {
+.admin-detail-laporan-content {
     width: 100%;
     min-height: 100%;
-    overflow: visible;
 }
 
-.detail-laporan-card {
+.admin-detail-laporan-content svg {
+    stroke: var(--black);
+    fill: none;
+    flex-shrink: 0;
+}
+
+.admin-detail-laporan-card {
+    width: 100%;
     background: #fff;
     border: 4px solid var(--black);
     box-shadow: 8px 8px 0 var(--black);
     padding: 20px;
 }
 
-.detail-laporan-title {
-    width: fit-content;
+.admin-detail-laporan-title {
+    width: 100%;
+    min-height: 82px;
+    background: var(--green);
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
+    padding: 12px 18px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.admin-detail-laporan-title-icon {
+    width: 54px;
+    height: 54px;
     background: var(--yellow);
     border: 4px solid var(--black);
-    box-shadow: 5px 5px 0 var(--black);
-    padding: 10px 18px;
-    font-size: 22px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.admin-detail-laporan-title-icon svg {
+    width: 34px;
+    height: 34px;
+    stroke-width: 3.4;
+}
+
+.admin-detail-laporan-title h2 {
+    margin: 0;
+    font-size: 26px;
     font-weight: 900;
+    line-height: 1;
+}
+
+.admin-detail-laporan-title p {
+    margin: 7px 0 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.admin-detail-laporan-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
     margin-bottom: 22px;
 }
 
-.detail-laporan-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-}
-
-.detail-laporan-item {
-    border: 3px solid var(--black);
-    background: #fff;
-    padding: 12px;
-}
-
-.detail-laporan-item.full {
-    grid-column: 1 / -1;
-}
-
-.detail-laporan-item .detail-label {
-    font-size: 13px;
-    font-weight: 900;
-    margin-bottom: 6px;
-}
-
-.detail-laporan-item .detail-value {
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.4;
-}
-
-.detail-laporan-actions {
-    margin-top: 22px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.detail-laporan-btn {
-    min-width: 150px;
-    min-height: 46px;
+.admin-detail-laporan-box {
     border: 4px solid var(--black);
     box-shadow: 5px 5px 0 var(--black);
+    padding: 12px;
+    min-height: 82px;
+}
+
+.admin-detail-laporan-box.green {
+    background: var(--green);
+}
+
+.admin-detail-laporan-box.blue {
+    background: var(--blue);
+}
+
+.admin-detail-laporan-box.yellow {
+    background: var(--yellow);
+}
+
+.admin-detail-laporan-box.red {
+    background: var(--red);
+}
+
+.admin-detail-laporan-label {
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.admin-detail-laporan-value {
+    font-size: 16px;
+    font-weight: 900;
+    word-break: break-word;
+}
+
+.admin-detail-laporan-section {
+    background: #fff;
+    border: 4px solid var(--black);
+    box-shadow: 5px 5px 0 var(--black);
+    margin-bottom: 18px;
+}
+
+.admin-detail-laporan-section-title {
+    min-height: 44px;
+    background: var(--blue);
+    border-bottom: 4px solid var(--black);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.admin-detail-laporan-section-body {
+    min-height: 70px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.5;
+    white-space: pre-line;
+}
+
+.admin-detail-laporan-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+
+.admin-detail-laporan-btn {
+    min-width: 210px;
+    min-height: 52px;
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
     padding: 0 18px;
     color: var(--black);
     text-decoration: none;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 900;
     display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
-.detail-laporan-btn.blue {
-    background: var(--blue);
+.admin-detail-laporan-btn.yellow {
+    background: var(--yellow);
 }
 
-@media (max-width: 900px) {
-    .data-laporan-content .toolbar {
+.admin-detail-laporan-btn:hover {
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 0 var(--black);
+}
+
+@media (max-width: 1100px) {
+    .admin-detail-laporan-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .admin-detail-laporan-grid {
         grid-template-columns: 1fr;
     }
 
-    .data-laporan-content .stat-row {
-        grid-template-columns: 1fr;
-    }
-
-    .data-laporan-content .search-box input,
-    .data-laporan-content .search-btn {
+    .admin-detail-laporan-btn {
         width: 100%;
-        height: 48px;
-    }
-
-    .detail-laporan-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .detail-laporan-item.full {
-        grid-column: auto;
     }
 }
 
@@ -7224,3 +7314,974 @@ body {
         width: 100%;
     }
 }
+
+/* =========================================================
+   FIX FINAL DASHBOARD PASIEN - STAT CARD & ICON
+========================================================= */
+
+.pasien-dashboard-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Statistik dashboard pasien */
+.pasien-dashboard-content > .stat-row {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(220px, 1fr)) !important;
+    gap: 18px !important;
+}
+
+.pasien-dashboard-content > .stat-row > .stat-card {
+    min-height: 110px !important;
+    background: #fff !important;
+    border: 4px solid var(--black) !important;
+    box-shadow: 7px 7px 0 var(--black) !important;
+    display: grid !important;
+    grid-template-columns: 70px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 14px 18px !important;
+    position: relative !important;
+}
+
+/* Kotak icon kecil */
+.pasien-dashboard-content > .stat-row > .stat-card > .stat-icon {
+    width: 58px !important;
+    height: 70px !important;
+    border: 4px solid var(--black) !important;
+    box-shadow: 5px 5px 0 var(--black) !important;
+    display: grid !important;
+    place-items: center !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+}
+
+/* Warna icon */
+.pasien-dashboard-content .stat-icon.green {
+    background: var(--green) !important;
+}
+
+.pasien-dashboard-content .stat-icon.yellow {
+    background: var(--yellow) !important;
+}
+
+.pasien-dashboard-content .stat-icon.blue {
+    background: var(--blue) !important;
+}
+
+/* INI YANG PENTING: paksa SVG jadi kecil */
+.pasien-dashboard-content > .stat-row > .stat-card > .stat-icon svg {
+    width: 34px !important;
+    height: 34px !important;
+    max-width: 34px !important;
+    max-height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    stroke: var(--black) !important;
+    fill: none !important;
+    stroke-width: 3.4 !important;
+    display: block !important;
+}
+
+/* Teks statistik */
+.pasien-dashboard-content .stat-label {
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+}
+
+.pasien-dashboard-content .stat-number {
+    font-size: 36px !important;
+    line-height: 1 !important;
+    font-weight: 900 !important;
+    margin-top: 6px !important;
+}
+
+.pasien-dashboard-content .card-dots {
+    position: absolute !important;
+    right: 16px !important;
+    bottom: 10px !important;
+    font-weight: 900 !important;
+    letter-spacing: 7px !important;
+}
+
+/* Grid bawah: tabel + menu cepat */
+.pasien-dashboard-content .dashboard-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.5fr) minmax(340px, 0.8fr) !important;
+    gap: 22px !important;
+    align-items: stretch !important;
+}
+
+.pasien-dashboard-content .panel {
+    background: #fff !important;
+    border: 4px solid var(--black) !important;
+    box-shadow: 7px 7px 0 var(--black) !important;
+    padding: 18px !important;
+    min-width: 0 !important;
+}
+
+.pasien-dashboard-content .panel-title {
+    width: fit-content !important;
+    min-height: 42px !important;
+    background: var(--yellow) !important;
+    border: 4px solid var(--black) !important;
+    box-shadow: 5px 5px 0 var(--black) !important;
+    padding: 0 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 20px !important;
+    font-weight: 900 !important;
+    margin-bottom: 16px !important;
+}
+
+/* Tabel */
+.pasien-dashboard-content .table-wrap {
+    width: 100% !important;
+    min-height: 260px !important;
+    border: 3px solid var(--black) !important;
+    overflow-x: auto !important;
+}
+
+.pasien-dashboard-content table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+}
+
+.pasien-dashboard-content th,
+.pasien-dashboard-content td {
+    height: 52px !important;
+    border: 2px solid var(--black) !important;
+    padding: 10px 12px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    font-size: 14px !important;
+}
+
+.pasien-dashboard-content th {
+    background: var(--blue) !important;
+    font-weight: 900 !important;
+}
+
+.pasien-dashboard-content .empty {
+    height: 190px !important;
+    font-weight: 900 !important;
+    color: #555 !important;
+    text-align: center !important;
+}
+
+/* Menu cepat */
+.pasien-dashboard-content .quick-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+}
+
+.pasien-dashboard-content .quick-action {
+    min-height: 78px !important;
+    display: grid !important;
+    grid-template-columns: 72px minmax(0, 1fr) 58px !important;
+    align-items: center !important;
+    background: var(--green) !important;
+    border: 4px solid var(--black) !important;
+    box-shadow: 6px 6px 0 var(--black) !important;
+    color: var(--black) !important;
+    text-decoration: none !important;
+    font-weight: 900 !important;
+}
+
+.pasien-dashboard-content .quick-action.blue {
+    background: var(--blue) !important;
+}
+
+.pasien-dashboard-content .quick-action.yellow {
+    background: var(--yellow) !important;
+}
+
+.pasien-dashboard-content .quick-action.red {
+    background: var(--red) !important;
+}
+
+.pasien-dashboard-content .quick-icon {
+    height: 100% !important;
+    display: grid !important;
+    place-items: center !important;
+    background: #fff !important;
+    border-right: 4px solid var(--black) !important;
+}
+
+.pasien-dashboard-content .quick-icon svg {
+    width: 34px !important;
+    height: 34px !important;
+    max-width: 34px !important;
+    max-height: 34px !important;
+    stroke: var(--black) !important;
+    fill: none !important;
+    stroke-width: 3.4 !important;
+}
+
+.pasien-dashboard-content .quick-text {
+    padding: 0 18px !important;
+    font-size: 18px !important;
+}
+
+.pasien-dashboard-content .quick-arrow {
+    width: 38px !important;
+    height: 38px !important;
+    background: #fff !important;
+    border: 3px solid var(--black) !important;
+    display: grid !important;
+    place-items: center !important;
+    margin-right: 14px !important;
+}
+
+.pasien-dashboard-content .quick-arrow svg {
+    width: 25px !important;
+    height: 25px !important;
+    max-width: 25px !important;
+    max-height: 25px !important;
+    stroke: var(--black) !important;
+    fill: none !important;
+    stroke-width: 3.4 !important;
+}
+
+@media (max-width: 1100px) {
+    .pasien-dashboard-content > .stat-row,
+    .pasien-dashboard-content .dashboard-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* =========================================================
+   DOKTER - TAMBAH PEMERIKSAAN
+========================================================= */
+
+.dokter-form-pemeriksaan-content {
+    width: 100%;
+    min-height: 100%;
+}
+
+.dokter-form-pemeriksaan-content svg {
+    stroke: var(--black);
+    fill: none;
+    flex-shrink: 0;
+}
+
+.dokter-form-card {
+    width: 100%;
+    background: #fff;
+    border: 4px solid var(--black);
+    box-shadow: 8px 8px 0 var(--black);
+    padding: 20px;
+}
+
+.dokter-form-title {
+    width: 100%;
+    min-height: 80px;
+    background: var(--green);
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
+    padding: 12px 18px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.dokter-form-title-icon {
+    width: 54px;
+    height: 54px;
+    background: var(--yellow);
+    border: 4px solid var(--black);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.dokter-form-title-icon svg {
+    width: 34px;
+    height: 34px;
+    stroke-width: 3.4;
+}
+
+.dokter-form-title h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.dokter-form-title p {
+    margin: 7px 0 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.dokter-pasien-info {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.dokter-pasien-info .info-box {
+    background: #fff;
+    border: 4px solid var(--black);
+    box-shadow: 5px 5px 0 var(--black);
+    padding: 12px;
+    min-height: 74px;
+}
+
+.dokter-pasien-info .info-label {
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.dokter-pasien-info .info-value {
+    font-size: 16px;
+    font-weight: 900;
+    word-break: break-word;
+}
+
+.dokter-form-pemeriksaan {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.dokter-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.dokter-form-group textarea {
+    width: 100%;
+    min-height: 115px;
+    border: 4px solid var(--black);
+    background: #fff;
+    padding: 12px 14px;
+    font-size: 15px;
+    font-weight: 700;
+    resize: vertical;
+    outline: none;
+}
+
+.dokter-form-group textarea:focus {
+    background: #fff8d6;
+}
+
+.form-error {
+    margin-top: 6px;
+    color: #b00000;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.dokter-form-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.dokter-form-btn {
+    min-width: 190px;
+    min-height: 52px;
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
+    padding: 0 18px;
+    color: var(--black);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.dokter-form-btn.yellow {
+    background: var(--yellow);
+}
+
+.dokter-form-btn.blue {
+    background: var(--blue);
+}
+
+.dokter-form-btn:hover {
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 0 var(--black);
+}
+
+@media (max-width: 1100px) {
+    .dokter-pasien-info {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .dokter-pasien-info {
+        grid-template-columns: 1fr;
+    }
+
+    .dokter-form-actions {
+        flex-direction: column;
+    }
+
+    .dokter-form-btn {
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   DOKTER - DETAIL PEMERIKSAAN
+========================================================= */
+
+.dokter-detail-pemeriksaan-content {
+    width: 100%;
+    min-height: 100%;
+}
+
+.dokter-detail-pemeriksaan-content svg {
+    stroke: var(--black);
+    fill: none;
+    flex-shrink: 0;
+}
+
+.dokter-detail-card {
+    width: 100%;
+    background: #fff;
+    border: 4px solid var(--black);
+    box-shadow: 8px 8px 0 var(--black);
+    padding: 20px;
+}
+
+.dokter-detail-title {
+    width: 100%;
+    min-height: 82px;
+    background: var(--green);
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
+    padding: 12px 18px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.dokter-detail-title-icon {
+    width: 54px;
+    height: 54px;
+    background: var(--yellow);
+    border: 4px solid var(--black);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.dokter-detail-title-icon svg {
+    width: 34px;
+    height: 34px;
+    stroke-width: 3.4;
+}
+
+.dokter-detail-title h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.dokter-detail-title p {
+    margin: 7px 0 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.dokter-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.dokter-detail-box {
+    border: 4px solid var(--black);
+    box-shadow: 5px 5px 0 var(--black);
+    padding: 12px;
+    min-height: 82px;
+}
+
+.dokter-detail-box.green {
+    background: var(--green);
+}
+
+.dokter-detail-box.blue {
+    background: var(--blue);
+}
+
+.dokter-detail-box.yellow {
+    background: var(--yellow);
+}
+
+.dokter-detail-box.red {
+    background: var(--red);
+}
+
+.dokter-detail-label {
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.dokter-detail-value {
+    font-size: 16px;
+    font-weight: 900;
+    word-break: break-word;
+}
+
+.dokter-detail-section {
+    background: #fff;
+    border: 4px solid var(--black);
+    box-shadow: 5px 5px 0 var(--black);
+    margin-bottom: 18px;
+}
+
+.dokter-detail-section-title {
+    min-height: 44px;
+    background: var(--blue);
+    border-bottom: 4px solid var(--black);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.dokter-detail-section-body {
+    min-height: 70px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.5;
+    white-space: pre-line;
+}
+
+.dokter-detail-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+
+.dokter-detail-btn {
+    min-width: 210px;
+    min-height: 52px;
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
+    padding: 0 18px;
+    color: var(--black);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dokter-detail-btn.yellow {
+    background: var(--yellow);
+}
+
+.dokter-detail-btn.blue {
+    background: var(--blue);
+}
+
+.dokter-detail-btn:hover {
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 0 var(--black);
+}
+
+@media (max-width: 1100px) {
+    .dokter-detail-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .dokter-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dokter-detail-actions {
+        flex-direction: column;
+    }
+
+    .dokter-detail-btn {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   ADMIN - TAMBAH / EDIT PENDAFTARAN FORM
+   Catatan:
+   - Digunakan untuk resources/views/admin/create-pendaftaran.blade.php
+   - Digunakan untuk resources/views/admin/edit-pendaftaran.blade.php
+   - Mencegah SVG menjadi icon hitam besar
+========================================================= */
+
+.tambah-pendaftaran-content {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.tambah-pendaftaran-content svg {
+    stroke: var(--black);
+    fill: none;
+    flex-shrink: 0;
+    max-width: 34px;
+    max-height: 34px;
+}
+
+/* ALERT */
+.pendaftaran-form-alert {
+    width: 100%;
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.pendaftaran-form-alert.error {
+    background: var(--red);
+}
+
+.pendaftaran-form-alert.success {
+    background: var(--green);
+}
+
+/* CARD */
+.pendaftaran-form-card {
+    width: 100%;
+    background: #fff;
+    border: 4px solid var(--black);
+    box-shadow: 8px 8px 0 var(--black);
+    padding: 20px;
+}
+
+/* TITLE */
+.pendaftaran-form-title {
+    width: 100%;
+    min-height: 78px;
+    background: var(--green);
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
+    padding: 12px 18px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.pendaftaran-form-title-icon {
+    width: 52px;
+    height: 52px;
+    background: var(--yellow);
+    border: 4px solid var(--black);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.pendaftaran-form-title-icon svg {
+    width: 34px !important;
+    height: 34px !important;
+    max-width: 34px !important;
+    max-height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    stroke: var(--black) !important;
+    stroke-width: 3.4 !important;
+    fill: none !important;
+}
+
+.pendaftaran-form-title h2 {
+    margin: 0;
+    font-size: 26px;
+    line-height: 1;
+    font-weight: 900;
+}
+
+.pendaftaran-form-title p {
+    margin: 7px 0 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* FORM */
+.pendaftaran-form {
+    width: 100%;
+}
+
+.pendaftaran-form-section {
+    margin-bottom: 26px;
+}
+
+.pendaftaran-form-section .section-label {
+    width: fit-content;
+    background: var(--yellow);
+    border: 4px solid var(--black);
+    box-shadow: 5px 5px 0 var(--black);
+    padding: 8px 18px;
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 18px;
+}
+
+.pendaftaran-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.pendaftaran-form-group {
+    min-width: 0;
+}
+
+.pendaftaran-form-group.full {
+    grid-column: 1 / -1;
+}
+
+.pendaftaran-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.pendaftaran-form-group input,
+.pendaftaran-form-group select,
+.pendaftaran-form-group textarea {
+    width: 100%;
+    border: 4px solid var(--black);
+    background: #fff;
+    padding: 0 14px;
+    font-size: 15px;
+    font-weight: 700;
+    outline: none;
+}
+
+.pendaftaran-form-group input,
+.pendaftaran-form-group select {
+    height: 48px;
+}
+
+.pendaftaran-form-group textarea {
+    min-height: 110px;
+    padding: 12px 14px;
+    resize: vertical;
+}
+
+.pendaftaran-form-group input:focus,
+.pendaftaran-form-group select:focus,
+.pendaftaran-form-group textarea:focus {
+    background: #fff8d6;
+}
+
+.pendaftaran-form-error {
+    margin-top: 6px;
+    color: #b00000;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+/* BUTTON */
+.pendaftaran-form-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.pendaftaran-form-btn {
+    min-width: 170px;
+    min-height: 52px;
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
+    padding: 0 18px;
+    color: var(--black);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.pendaftaran-form-btn.yellow {
+    background: var(--yellow);
+}
+
+.pendaftaran-form-btn.blue {
+    background: var(--blue);
+}
+
+.pendaftaran-form-btn.red {
+    background: var(--red);
+}
+
+.pendaftaran-form-btn:hover {
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 0 var(--black);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .pendaftaran-form-card {
+        padding: 16px;
+    }
+
+    .pendaftaran-form-title {
+        align-items: flex-start;
+        padding: 12px 14px;
+    }
+
+    .pendaftaran-form-title h2 {
+        font-size: 23px;
+    }
+
+    .pendaftaran-form-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .pendaftaran-form-group.full {
+        grid-column: auto;
+    }
+
+    .pendaftaran-form-actions {
+        flex-direction: column;
+    }
+
+    .pendaftaran-form-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .pendaftaran-form-card {
+        border-width: 3px;
+        box-shadow: 5px 5px 0 var(--black);
+        padding: 12px;
+    }
+
+    .pendaftaran-form-title {
+        border-width: 3px;
+        box-shadow: 4px 4px 0 var(--black);
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .pendaftaran-form-title-icon {
+        width: 46px;
+        height: 46px;
+        border-width: 3px;
+    }
+
+    .pendaftaran-form-title-icon svg {
+        width: 30px !important;
+        height: 30px !important;
+        max-width: 30px !important;
+        max-height: 30px !important;
+        min-width: 30px !important;
+        min-height: 30px !important;
+    }
+
+    .pendaftaran-form-title h2 {
+        font-size: 21px;
+    }
+
+    .pendaftaran-form-title p {
+        font-size: 13px;
+    }
+
+    .pendaftaran-form-section .section-label {
+        font-size: 16px;
+        padding: 7px 14px;
+        border-width: 3px;
+        box-shadow: 4px 4px 0 var(--black);
+    }
+
+    .pendaftaran-form-group input,
+    .pendaftaran-form-group select {
+        height: 46px;
+    }
+
+    .pendaftaran-form-group input,
+    .pendaftaran-form-group select,
+    .pendaftaran-form-group textarea {
+        border-width: 3px;
+        font-size: 14px;
+    }
+
+    .pendaftaran-form-btn {
+        min-height: 50px;
+        font-size: 15px;
+        border-width: 3px;
+        box-shadow: 4px 4px 0 var(--black);
+    }
+}
+
+.pasien-pendaftaran-content {
+    padding-top: 0;
+    scroll-margin-top: 0;
+}
+
+.pasien-pendaftaran-toolbar {
+    margin-top: 0 !important;
+    flex-shrink: 0;
+}
+
+.pasien-pendaftaran-table .status,
+.pasien-pendaftaran-table .status.menunggu,
+.pasien-pendaftaran-table .status.diperiksa,
+.pasien-pendaftaran-table .status.selesai {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 86px;
+    height: 30px;
+    border: 3px solid var(--black);
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.pasien-pendaftaran-table .status.menunggu {
+    background: var(--yellow);
+}
+
+.pasien-pendaftaran-table .status.diperiksa {
+    background: var(--blue);
+}
+
+.pasien-pendaftaran-table .status.selesai {
+    background: var(--green);
+}
+
