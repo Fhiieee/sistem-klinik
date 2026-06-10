@@ -16,6 +16,92 @@
     {{-- CSS utama --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
 
+    {{-- FIX DARURAT SVG GEDE DI RAILWAY --}}
+    <style>
+        svg {
+            width: 24px !important;
+            height: 24px !important;
+            max-width: 24px !important;
+            max-height: 24px !important;
+            min-width: 24px !important;
+            min-height: 24px !important;
+            stroke: #000 !important;
+            fill: none !important;
+            flex-shrink: 0 !important;
+            display: inline-block !important;
+        }
+
+        .sidebar svg,
+        .topbar svg,
+        .profile-button svg,
+        .profile-area svg,
+        .profile-menu svg,
+        .menu-item svg,
+        .logout-btn svg,
+        .quick-menu-icon svg,
+        .quick-menu-item svg,
+        .stat-icon svg,
+        .card-icon svg,
+        .dashboard-card svg,
+        .dashboard-icon svg,
+        .dashboard-card-icon svg,
+        .pendaftaran-form-title-icon svg,
+        .dokter-search-box svg,
+        .pasien-jadwal-search svg,
+        .pasien-pendaftaran-search svg,
+        .pasien-riwayat-search svg,
+        .data-pasien-search svg,
+        .data-dokter-search svg,
+        .data-poli-search svg,
+        .data-jadwal-content svg,
+        .dokter-toolbar svg,
+        .dokter-search-box svg,
+        .admin-search-box svg,
+        .search-box svg,
+        .toolbar svg {
+            width: 28px !important;
+            height: 28px !important;
+            max-width: 28px !important;
+            max-height: 28px !important;
+            min-width: 28px !important;
+            min-height: 28px !important;
+            stroke: #000 !important;
+            fill: none !important;
+        }
+
+        .stat-icon svg,
+        .card-icon svg,
+        .quick-menu-icon svg,
+        .pendaftaran-form-title-icon svg,
+        .dashboard-card-icon svg {
+            width: 34px !important;
+            height: 34px !important;
+            max-width: 34px !important;
+            max-height: 34px !important;
+            min-width: 34px !important;
+            min-height: 34px !important;
+        }
+
+        .sidebar .logo svg,
+        .logo svg,
+        .brand svg {
+            width: auto !important;
+            height: auto !important;
+            max-width: 80px !important;
+            max-height: 80px !important;
+        }
+
+        .admin-content svg:not(.allow-large-svg),
+        .main svg:not(.allow-large-svg) {
+            width: 28px !important;
+            height: 28px !important;
+            max-width: 28px !important;
+            max-height: 28px !important;
+            min-width: 28px !important;
+            min-height: 28px !important;
+        }
+    </style>
+
     {{-- CSS tambahan khusus halaman tertentu --}}
     @yield('extra-css')
 </head>
