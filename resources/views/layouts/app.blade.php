@@ -14,7 +14,7 @@
     </title>
 
     {{-- CSS utama --}}
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ secure_asset('css/style.css') }}?v={{ time() }}">
 
     {{-- CSS tambahan khusus halaman tertentu --}}
     @yield('extra-css')
@@ -27,51 +27,33 @@
             layoutType dipakai untuk membedakan halaman:
             - admin  = halaman admin
             - dokter = halaman dokter
-            - pasien = halaman pasien
-            - kosong = halaman auth/login/register
+            - kosong = halaman auth/login/register biasa
         */
         $layoutType = trim($__env->yieldContent('layout-type', ''));
 
         /*
-            activeMenu dipakai sidebar supaya menu yang sedang aktif menyala.
-            Contoh:
+            activeMenu dipakai sidebar supaya menu yang sedang aktif bisa menyala.
+            Contoh di blade:
             @section('active-menu', 'dashboard')
         */
         $activeMenu = trim($__env->yieldContent('active-menu', ''));
 
         /*
             Label role untuk topbar/profile.
+            Nanti bisa dipakai di components.topbar kalau dibutuhkan.
         */
-        $roleLabel = match ($layoutType) {
-            'dokter' => 'Dokter',
-            'pasien' => 'Pasien',
-            'admin' => 'Admin',
-            default => 'User',
-        };
+        $roleLabel = $layoutType === 'dokter' ? 'Dokter' : 'Admin';
 
         /*
-            Route profile dibedakan berdasarkan role.
+            Route profile dibedakan.
+            Kalau dokter belum punya route profile, sementara diarahkan ke dashboard dokter dulu.
         */
-        $profileRoute = match ($layoutType) {
-            'dokter' => Route::has('dokter.profile')
-                ? route('dokter.profile')
-                : route('dokter.dashboard'),
-
-            'pasien' => Route::has('pasien.profile')
-                ? route('pasien.profile')
-                : route('pasien.dashboard'),
-
-            'admin' => Route::has('admin.profile')
-                ? route('admin.profile')
-                : route('admin.dashboard'),
-
-            default => Route::has('login')
-                ? route('login')
-                : url('/'),
-        };
+        $profileRoute = $layoutType === 'dokter'
+            ? (Route::has('dokter.profile') ? route('dokter.profile') : route('dokter.dashboard'))
+            : (Route::has('admin.profile') ? route('admin.profile') : route('admin.dashboard'));
     @endphp
 
-    {{-- Layout untuk Admin, Dokter, dan Pasien --}}
+    {{-- Layout untuk Admin dan Dokter --}}
     @if($layoutType === 'admin' || $layoutType === 'dokter' || $layoutType === 'pasien')
         <div class="admin-page">
 
